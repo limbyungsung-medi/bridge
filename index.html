@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14213a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="영생의 다리">
+<title>하나님의 선물 영생 — 다리 예화</title>
+<link rel="manifest" id="mf">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#FBF7EF; --ink:#262626; --sub:#5b5b5b; --line:#e7dfcf;
+  --blue:#1F3A5F; --gold:#C9A227; --red:#B23A3A; --green:#2E7D5B;
+  --card:#ffffff; --fs:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#14213a}
+body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);font-size:var(--fs);line-height:1.7;word-break:keep-all;overscroll-behavior:none}
+#app{max-width:560px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+
+/* header */
+header{display:flex;align-items:center;gap:6px;padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top));background:#14213a;color:#fff}
+header .ttl{flex:1;min-width:0;font-weight:700;font-size:15px;letter-spacing:-.01em}
+header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
+.hb{background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:10px;min-width:38px;height:38px;font-size:15px;font-family:inherit;padding:0 7px}
+.hb.on{background:var(--gold);color:#14213a;font-weight:700}
+
+/* stage */
+#stage{position:relative;flex:0 0 auto;height:min(40vh,300px);overflow:hidden}
+.sky{position:absolute;inset:0;transition:opacity 1.4s ease}
+#skyDay{background:linear-gradient(#8fc3ea,#e9f3fb 70%)}
+#skyNight{background:linear-gradient(#0b1020,#2a2f4a 75%);opacity:0}
+#skyDawn{background:linear-gradient(#f7d58b,#fff3d6 55%,#fde9c4);opacity:0}
+.night #skyNight{opacity:1}
+.dawn #skyDawn{opacity:1}
+#stage svg{position:absolute;inset:0;width:100%;height:100%}
+.tr{transition:transform 1.6s cubic-bezier(.6,0,.3,1),opacity 1.2s}
+#L{transform:translateX(0)} #R{transform:translateX(0)}
+.joined #L{transform:translateX(50px)} .joined #R{transform:translateX(-50px)}
+#filler{opacity:0} .joined #filler{opacity:1}
+#bond{opacity:0;transition:opacity 1s} .joined #bond,.crossed #bond2{opacity:1}
+#bond2{opacity:0;transition:opacity 1.2s .3s}
+#sinTxt{opacity:0;transition:opacity 1s .8s}
+.split #sinTxt{opacity:1}
+#deepTxt{opacity:0;transition:opacity 1s .4s}
+.deep #deepTxt{opacity:1}
+#crossG{transform:translateY(-460px);opacity:0;transition:transform 1.3s cubic-bezier(.3,1.35,.5,1),opacity .2s}
+.cross #crossG{transform:translateY(0);opacity:1}
+.night #P circle:not(#halo),.night #P path{fill:#f2f2f2;stroke:#f2f2f2}
+.cross #sinTxt{opacity:.45}
+#crossGlow{opacity:0;transition:opacity 1.2s 1s}
+.cross #crossGlow{opacity:1}
+#giftG{opacity:0;transform:scale(.3);transform-origin:365px 140px;transition:all .8s cubic-bezier(.3,1.5,.5,1)}
+.gift #giftG{opacity:1;transform:scale(1)}
+#lid{transition:transform .7s cubic-bezier(.3,1.6,.5,1)}
+.giftOpen #lid{transform:translate(14px,-26px) rotate(28deg)}
+#lifeTxt{opacity:0;transform:translateY(8px);transition:all .8s .3s}
+.giftOpen #lifeTxt{opacity:1;transform:translateY(-6px)}
+#halo{opacity:0;transition:opacity 1s}
+#riseG{opacity:0;transform:scale(.2);transform-origin:200px 118px;transition:transform 1.8s cubic-bezier(.2,1.2,.4,1),opacity 1.2s}
+.risen #riseG{opacity:1;transform:scale(1)}
+.risen #crossG text{opacity:0}
+details.faq{background:#fff;border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}
+details.faq summary{padding:12px 14px;font-weight:700;color:var(--blue);list-style:none;cursor:pointer;font-size:.95em}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq[open] summary{background:#eef3f9}
+details.faq div{padding:10px 14px 14px;font-size:.92em;line-height:1.75}
+.together .solo{display:none}
+.crossed #halo{opacity:1}
+#rays{opacity:.6;transform-origin:330px 92px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.shake{animation:shake .7s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+#bolt{opacity:0}
+.boltOn #bolt{animation:bolt 1s}
+@keyframes bolt{0%{opacity:0}15%{opacity:1}30%{opacity:.2}45%{opacity:1}100%{opacity:0}}
+.plank{transform-box:view-box;transform-origin:150px 150px}
+.plank.go{animation:plank 2.4s forwards}
+@keyframes plank{0%{transform:scaleX(0);opacity:1}35%{transform:scaleX(1);opacity:1}55%{transform:scaleX(1) rotate(0)}85%{transform:scaleX(1) rotate(65deg);opacity:1}100%{transform:scaleX(1) rotate(80deg) translateY(30px);opacity:0}}
+.lbl{font-family:Pretendard,sans-serif;font-weight:700}
+#stageCap{position:absolute;left:50%;top:8px;transform:translateX(-50%);max-width:92%;text-align:center;color:#fff;font-size:13px;font-weight:600;background:rgba(20,33,58,.55);padding:3px 12px;border-radius:20px;pointer-events:none;white-space:nowrap}
+#stageCap:empty{display:none}
+
+/* content */
+#panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 24px}
+.stepNo{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.05em}
+h2{margin:2px 0 8px;font-size:1.35em;line-height:1.35;color:var(--blue);letter-spacing:-.02em}
+p{margin:.4em 0 .8em}
+.verse{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:12px 14px;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.verse .ref{font-size:.8em;font-weight:700;color:var(--blue);margin-bottom:2px}
+.verse .tx{font-size:1em;line-height:1.75}
+.verse b{background:linear-gradient(transparent 58%,#f6e4a6 58%);font-weight:700}
+.verse.red{border-left-color:var(--red)} .verse.red b{background:linear-gradient(transparent 58%,#f3c9c9 58%)}
+.verse.green{border-left-color:var(--green)} .verse.green b{background:linear-gradient(transparent 58%,#cde9da 58%)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.btn{flex:1 1 auto;min-height:50px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-size:.95em;font-weight:700;font-family:inherit;padding:10px 14px}
+.btn.ghost{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.btn.gold{background:var(--gold);color:#14213a}
+.btn.small{min-height:40px;font-size:.82em;flex:0 0 auto}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.45}
+.bubble{background:#eef3f9;border-radius:16px 16px 16px 4px;padding:12px 14px;margin:10px 0;color:#1d2f48}
+.bubble.me{background:#fff4d6;border-radius:16px 16px 4px 16px;margin-left:30px}
+.fade{animation:fade .5s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.note{display:none;background:#1f2a3d;color:#e9eef6;border-radius:12px;padding:12px 14px;margin:14px 0;font-size:.85em;line-height:1.65}
+.note h4{margin:0 0 4px;color:var(--gold);font-size:.95em}
+.showNotes .note{display:block}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.cmp div{border-radius:12px;padding:10px 12px;font-size:.88em;line-height:1.55}
+.cmp .a{background:#f7e3e3} .cmp .b{background:#e2f2e9}
+.cmp strong{display:block;font-size:1.05em;margin-bottom:2px}
+.blank{display:inline-block;min-width:70px;text-align:center;border-bottom:2px solid var(--blue);color:transparent;cursor:pointer;padding:0 4px;border-radius:4px;background:#eef3f9;transition:all .3s}
+.blank.open{color:var(--green);font-weight:800;background:#e2f2e9;border-color:var(--green)}
+.prayer{background:#fff;border:2px dashed var(--gold);border-radius:14px;padding:14px 16px;font-size:1.02em;line-height:1.95}
+.train{display:flex;gap:6px;align-items:stretch;margin:10px 0}
+.train div{flex:1;border-radius:10px;padding:8px 4px;text-align:center;font-size:.8em;line-height:1.35;color:#fff}
+.card{background:linear-gradient(135deg,#1F3A5F,#2c5282);color:#fff;border-radius:18px;padding:18px;text-align:center;margin:12px 0}
+.card .big{font-size:1.35em;font-weight:800;color:#f7d58b}
+input.inp{width:100%;font-size:1em;font-family:inherit;padding:12px;border:2px solid var(--line);border-radius:12px;margin:6px 0}
+
+/* nav */
+nav{display:flex;align-items:center;gap:8px;padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line)}
+nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;font-weight:700;font-family:inherit}
+#prev{background:#eef0f4;color:var(--blue)} #next{background:var(--blue);color:#fff}
+#dots{flex:1;display:flex;justify-content:center;gap:5px;flex-wrap:wrap}
+#dots i{width:8px;height:8px;border-radius:50%;background:#d6d0c4}
+#dots i.on{background:var(--gold);width:20px;border-radius:5px}
+
+/* toc */
+#toc{position:absolute;inset:0;background:rgba(10,16,30,.55);display:none;z-index:20}
+#toc.open{display:block}
+#toc .sheet{position:absolute;right:0;top:0;bottom:0;width:82%;max-width:380px;background:#fff;padding:16px;overflow:auto;padding-top:max(16px,env(safe-area-inset-top))}
+#toc button{display:block;width:100%;text-align:left;border:0;background:none;font-family:inherit;font-size:16px;padding:12px 6px;border-bottom:1px solid var(--line);color:var(--ink)}
+#toc button.cur{color:var(--blue);font-weight:800}
+#toast{position:absolute;left:50%;top:70px;transform:translateX(-50%);background:rgba(20,33,58,.92);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:30;white-space:nowrap}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="ttl">하나님의 선물 · 영생<small>다리 예화로 보는 복음</small></div>
+    <button class="hb" id="spkBtn" title="읽어 주기">🔊</button><button class="hb" id="modeBtn" title="함께/혼자 보기">🙋</button><button class="hb" id="fsBtn" title="글자 크기">가<sup>±</sup></button>
+    <button class="hb" id="noteBtn" title="전하는 이 노트">📝</button>
+    <button class="hb" id="tocBtn" title="목차">☰</button>
+  </header>
+
+  <div id="stage" class="joined">
+    <div class="sky" id="skyDay"></div><div class="sky" id="skyNight"></div><div class="sky" id="skyDawn"></div>
+    <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax meet" id="svg">
+      <defs>
+        <radialGradient id="sun"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#ffe08a"/><stop offset="1" stop-color="#ffd25a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1b1b"/><stop offset="1" stop-color="#050505"/></linearGradient>
+        <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a4a22"/><stop offset=".5" stop-color="#a8682f"/><stop offset="1" stop-color="#7a4a22"/></linearGradient>
+        <radialGradient id="glow"><stop offset="0" stop-color="#fff2b8" stop-opacity=".9"/><stop offset="1" stop-color="#fff2b8" stop-opacity="0"/></radialGradient>
+        <linearGradient id="earthL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6650"/><stop offset="1" stop-color="#4a3c2f"/></linearGradient>
+      </defs>
+
+      <!-- chasm -->
+      <rect x="120" y="150" width="160" height="95" fill="url(#abyss)"/>
+      <text id="sinTxt" class="lbl" x="200" y="190" text-anchor="middle" font-size="26" fill="#ff6b6b">죄</text>
+      <g id="deepTxt"><text class="lbl" x="166" y="226" text-anchor="middle" font-size="13" fill="#ff9d9d">사망</text><text class="lbl" x="234" y="226" text-anchor="middle" font-size="13" fill="#ff9d9d">심판</text></g>
+
+      <!-- God light -->
+      <g id="rays">
+        <g stroke="#ffe08a" stroke-width="2" opacity=".7">
+          <line x1="330" y1="50" x2="330" y2="38"/><line x1="330" y1="134" x2="330" y2="146"/>
+          <line x1="288" y1="92" x2="276" y2="92"/><line x1="372" y1="92" x2="384" y2="92"/>
+          <line x1="300" y1="62" x2="292" y2="54"/><line x1="360" y1="122" x2="368" y2="130"/>
+          <line x1="360" y1="62" x2="368" y2="54"/><line x1="300" y1="122" x2="292" y2="130"/>
+        </g>
+      </g>
+      <circle cx="330" cy="92" r="40" fill="url(#sun)"/>
+
+      <!-- effort planks -->
+      <g id="planks"></g>
+
+      <!-- cliffs -->
+      <g id="L" class="tr">
+        <path d="M-60 150 L150 150 L141 172 L151 196 L136 240 L-60 240 Z" fill="url(#earthL)"/>
+        <path d="M-60 150 L150 150" stroke="#6aa84f" stroke-width="5"/>
+        <text class="lbl" x="70" y="185" text-anchor="middle" font-size="14" fill="#fff">사람</text>
+      </g>
+      <g id="R" class="tr">
+        <path d="M250 150 L460 150 L460 240 L264 240 L250 212 L262 182 Z" fill="url(#earthL)"/>
+        <path d="M250 150 L460 150" stroke="#6aa84f" stroke-width="5"/>
+        <text class="lbl" x="330" y="185" text-anchor="middle" font-size="14" fill="#fff">하나님</text>
+      </g>
+      <rect id="filler" class="tr" x="170" y="147.5" width="60" height="93" fill="url(#earthL)"/>
+      <rect id="fillerG" x="170" y="147.5" width="60" height="5" fill="#6aa84f" style="opacity:var(--fg,1);transition:opacity 1s"/>
+
+      <!-- crack bolt -->
+      <path id="bolt" d="M200 60 L188 100 L206 108 L192 150 L210 160 L196 238" stroke="#ff4d4d" stroke-width="4" fill="none"/>
+
+      <g id="riseG">
+        <circle cx="200" cy="118" r="120" fill="url(#glow)"/>
+        <g stroke="#fff6c8" stroke-width="3" stroke-linecap="round" opacity=".9">
+          <line x1="200" y1="40" x2="200" y2="10"/><line x1="150" y1="60" x2="128" y2="38"/><line x1="250" y1="60" x2="272" y2="38"/>
+          <line x1="122" y1="105" x2="92" y2="98"/><line x1="278" y1="105" x2="308" y2="98"/></g>
+        <text class="lbl" x="200" y="30" text-anchor="middle" font-size="12" fill="#a0700a">부활하신 예수님</text>
+      </g>
+      <!-- cross -->
+      <g id="crossG">
+        <ellipse id="crossGlow" cx="200" cy="140" rx="90" ry="70" fill="url(#glow)"/>
+        <rect x="193" y="92" width="14" height="150" rx="2" fill="url(#wood)"/>
+        <rect x="134" y="146" width="132" height="12" rx="2" fill="url(#wood)"/>
+        <text class="lbl" x="200" y="86" text-anchor="middle" font-size="11" fill="#7a3f12">예수 그리스도</text>
+      </g>
+
+      <!-- bonds -->
+      <path id="bond" d="M95 118 Q210 40 310 80" stroke="#e0a800" stroke-width="2.5" fill="none" stroke-dasharray="5 5"/>
+      <path id="bond2" d="M305 120 Q315 100 312 98" stroke="#e0a800" stroke-width="0" fill="none"/>
+
+      <!-- gift -->
+      <g id="giftG">
+        <text id="lifeTxt" class="lbl" x="365" y="114" text-anchor="middle" font-size="15" fill="#b8860b">영생</text>
+        <rect x="352" y="128" width="26" height="20" fill="#c0392b" rx="2"/>
+        <rect x="363" y="128" width="4" height="20" fill="#f1c40f"/>
+        <g id="lid"><rect x="349" y="121" width="32" height="8" fill="#e74c3c" rx="2"/><rect x="363" y="121" width="4" height="8" fill="#f1c40f"/>
+          <path d="M365 121 q-8 -9 -12 -2 q4 4 12 2 q8 -9 12 -2 q-4 4 -12 2" fill="#f1c40f"/></g>
+      </g>
+
+      <!-- person -->
+      <g id="P" transform="translate(85 0)">
+        <circle id="halo" cx="0" cy="118" r="20" fill="url(#glow)"/>
+        <circle cx="0" cy="113" r="6" fill="#2b2b2b"/>
+        <path d="M0 119 L0 136 M0 124 L-8 131 M0 124 L8 131 M0 136 L-6 148 M0 136 L6 148" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" fill="none"/>
+      </g>
+    </svg>
+    <div id="stageCap"></div>
+  </div>
+
+  <div id="panel"></div>
+
+  <nav>
+    <button class="nb" id="prev">◀ 이전</button>
+    <div id="dots"></div>
+    <button class="nb" id="next">다음 ▶</button>
+  </nav>
+
+  <div id="toc"><div class="sheet"><div style="font-weight:800;color:var(--blue);margin-bottom:6px">목차</div><div id="tocList"></div>
+    <div style="font-size:13px;color:#888;margin-top:14px;line-height:1.6">📝 버튼: 전하는 사람을 위한 질문·설명 노트를 켜고 끕니다.<br>그림의 단추를 누르면 움직임이 다시 재생됩니다.<br>좌우로 밀어서 넘길 수도 있습니다.</div></div></div>
+  <div id="toast"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const stage=$('#stage'), panel=$('#panel');
+let cur=0, prayed=false, personX=85;
+const LS='bridge_v1';
+const st=JSON.parse(localStorage.getItem(LS)||'{}');
+if(st.fs) document.documentElement.style.setProperty('--fs',st.fs+'px');
+
+const save=()=>{try{localStorage.setItem(LS,JSON.stringify(st))}catch(e){}};
+
+function V(ref,tx,cls=''){return `<div class="verse ${cls}"><div class="ref">${ref}</div><div class="tx">${tx}</div></div>`}
+function N(t){return `<div class="note"><h4>📝 전하는 이 노트</h4>${t}</div>`}
+
+function Q(q,a){return `<details class="faq"><summary>❓ ${q}</summary><div>${a}</div></details>`}
+const TESTIMONY=`저는 예수님을 믿는 집안에서 태어나, 어려서부터 착한 모범생이라는 칭찬을 들으며 자랐습니다. 그래서 저는 하나님 앞에서도 당연히 괜찮은 사람이라고 생각했습니다.<br><br>
+대학에 들어가 네비게이토의 한 형제가 이 다리 그림으로 복음을 전해 주었습니다. "의인은 없나니 하나도 없으며"(롬 3:10), "우리는 다 양 같아서 그릇 행하여 각기 제 길로 갔거늘"(사 53:6). 이 말씀 앞에서 저도 하나님을 떠나 제 길로 가던 <b>죄인</b>이라는 것을 처음으로 깨달았습니다. 착하게 사는 것이 저를 하나님께 데려다주는 다리가 아니었습니다.<br><br>
+<b>1983년 12월 30일</b>, 한양대 전철역에서 저는 예수님을 저의 구주로 영접했습니다. 그날 이후 지금까지 예수님은 제 삶의 중심이십니다.<br><br>
+이것은 제 한 사람의 이야기이고, 당신의 경험은 저와 다를 수 있습니다. 그러나 <b>같은 다리</b>가 지금 당신 앞에도 놓여 있습니다.`;
+
+const steps=[
+{id:'start',t:'시작',cap:'',stage:'joined',html:`
+<div class="stepNo">하나님의 선물</div>
+<h2>하나님과 나 사이,<br>예수님은 어떤 길을 여셨을까요?</h2>
+<p>기독교의 핵심 메시지를 <b>그림과 짧은 설명</b>으로 살펴봅니다. 10분 정도 걸리며, 언제든 멈추고 질문하셔도 됩니다.</p>
+<div class="btns" style="flex-direction:column">
+ <button class="btn" onclick="setMode('together',true)">👥 함께 보기<br><span style="font-weight:400;font-size:.8em">전하는 사람과 같이 보며 대화할 때</span></button>
+ <button class="btn ghost" onclick="setMode('alone',true)">🙋 혼자 보기<br><span style="font-weight:400;font-size:.8em">혼자 천천히 읽고 들어 볼 때</span></button>
+</div>
+${N('· "함께 보기"는 설명 글을 줄이고 그림을 크게 씁니다. 이 노트(📝)는 전하는 사람에게만 보이도록 켜 두세요.<br>· 대화를 여는 질문 예: "만약 오늘 밤 생명이 끝난다면 천국에 갈 확신이 있으세요?" "무엇을 근거로요?"<br>· 허락을 구하세요: "성경이 이 질문에 어떻게 답하는지 그림 하나로 보여 드려도 될까요?"')}`},
+
+{id:'love',t:'하나님의 뜻',cap:'하나님은 우리와 함께 살기 원하셨습니다',stage:'joined',html:`
+<div class="stepNo">1 · 하나님의 뜻</div>
+<h2>하나님은 우리를 사랑하시고<br>함께 살도록 지으셨습니다</h2>
+<p class="solo">성경은 하나님이 사람을 자기 형상대로 지으시고, 사람과 <b>친밀한 관계</b> 속에 살기 원하셨다고 말합니다. 그림처럼 처음에는 하나님과 사람 사이에 간격이 없었습니다.</p>
+<p class="solo">그런데 우리는 왜 하나님을 멀게 느끼고, 서로에게 상처를 주며 살아갈까요?</p>
+${V('요한복음 3:16','하나님이 세상을 <b>이처럼 사랑하사</b> 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 <b>영생을 얻게</b> 하려 하심이라')}
+${V('요한복음 10:10','내가 온 것은 양으로 생명을 얻게 하고 <b>더 풍성히</b> 얻게 하려는 것이라')}
+${Q('하나님이 정말 계신지 모르겠어요.','괜찮습니다. 이 앱은 믿으라고 강요하지 않습니다. 성경이 하나님과 사람에 대해 무엇이라고 말하는지 끝까지 들어 보시고, 그다음에 스스로 판단해 보세요. 질문은 언제나 환영입니다.')}
+${N('· 요 3:16의 "세상" 자리에 듣는 분의 이름을 넣어 읽어 보게 하세요.<br>· 질문: "하나님이 나를 사랑하신다는 말을 들으면 어떤 마음이 드세요?"<br>· 그런데 왜 많은 사람이 이 사랑을 누리지 못할까요? → 다음')}`},
+
+{id:'sin',t:'우리의 현실 — 죄',cap:'죄가 하나님과 사람 사이를 갈라 놓았습니다',stage:'split night',enter:crack,html:`
+<div class="stepNo">2 · 우리의 현실</div>
+<h2>죄가 하나님과 사람 사이를<br>갈라 놓았습니다</h2>
+<p class="solo">성경에서 죄는 나쁜 행동만을 뜻하지 않습니다. <b>하나님을 신뢰하지 않고, 그분 없이 내가 내 삶의 주인이 되어 살아가려는 마음</b>과 그로부터 나오는 행동을 포함합니다.</p>
+<div class="btns"><button class="btn small ghost" onclick="replayCrack()">▶ 다시 보기</button></div>
+${V('로마서 3:23','<b>모든 사람이 죄를 범하였으매</b> 하나님의 영광에 이르지 못하더니','red')}
+${V('이사야 53:6','우리는 다 양 같아서 그릇 행하여 <b>각기 제 길로 갔거늘</b> 여호와께서는 우리 모두의 죄악을 그에게 담당시키셨도다','red')}
+${V('이사야 59:2','오직 너희 죄악이 <b>너희와 너희 하나님 사이를 갈라 놓았고</b> 너희 죄가 그의 얼굴을 가리어서 너희에게서 듣지 않으시게 함이니라','red')}
+${Q('저는 착하게 살려고 하는데도 죄인인가요?','성경이 말하는 죄는 범죄의 크기가 아니라 <b>방향</b>의 문제입니다. 착하게 살아도 하나님 없이 내가 주인이 되어 "제 길로" 간다면 하나님과의 관계는 끊어진 상태입니다. 활을 쏠 때 1cm 빗나가도, 1m 빗나가도 과녁을 맞히지 못한 것은 같습니다. 성경의 "죄"라는 말에는 바로 이 "과녁을 빗나감"이라는 뜻이 있습니다.')}
+${N('· 롬 3:23의 "모든 사람"에 나도 포함되는지 물어보세요: "여기에 ○○님도 포함될까요? 저도 포함됩니다."<br>· 사 53:6은 전하는 이가 직접 깨달은 말씀이라면 그 경험을 짧게 나누세요.<br>· 정죄하는 말투보다 "저도 그랬습니다"라는 말투로.')}`},
+
+{id:'death',t:'죄의 결과',cap:'죄의 삯은 사망, 그 후에는 심판',stage:'split deep night',html:`
+<div class="stepNo">3 · 죄의 결과</div>
+<h2>죄의 결과는 사망과 심판입니다</h2>
+<p class="solo">성경은 죄의 값(삯)이 <b>사망</b>이라고 말합니다. 육체의 죽음만이 아니라 생명의 근원이신 하나님과 영원히 분리되는 것입니다.</p>
+${V('로마서 6:23 (앞)','<b>죄의 삯은 사망이요</b>','red')}
+${V('히브리서 9:27','한 번 죽는 것은 사람에게 정해진 것이요 <b>그 후에는 심판이 있으리니</b>','red')}
+${Q('하나님이 사랑이시라면서 왜 심판하시나요?','사랑과 공의는 서로 반대가 아닙니다. 불의를 그냥 덮는 재판관은 좋은 재판관이 아닙니다. 하나님은 거룩하시기에 죄를 심판하시고, 동시에 사랑하시기에 그 심판을 대신 받을 길을 준비하셨습니다. 그 이야기가 곧 이어집니다.')}
+${N('· 질문: "삯"이 무엇일까요? → 일한 대가로 받는 품삯.<br>· 겁을 주기보다 사실을 담담히 전하세요.<br>· "사람들은 이 골짜기를 어떻게 건너려고 할까요?" → 다음')}`},
+
+{id:'effort',t:'우리의 한계',cap:'어떤 노력도 하나님께 닿지 못합니다',stage:'split deep night',html:`
+<div class="stepNo">4 · 우리의 한계</div>
+<h2>우리의 노력으로는<br>건널 수 없습니다</h2>
+<p>사람들은 이 골짜기를 건너려고 여러 가지 다리를 놓습니다. 단추를 눌러 <b>직접 건너가 보세요.</b></p>
+<div class="btns">
+ <button class="btn ghost" onclick="tryPlank(this,'선행',78)">🤲 선행</button>
+ <button class="btn ghost" onclick="tryPlank(this,'종교',66)">🙏 종교</button>
+ <button class="btn ghost" onclick="tryPlank(this,'도덕',72)">⚖️ 도덕</button>
+ <button class="btn ghost" onclick="tryPlank(this,'철학·교양',60)">📚 철학</button>
+ <button class="btn ghost" onclick="tryPlank(this,'돈·성공',54)">💰 성공</button>
+</div>
+<div id="effortMsg"></div>
+${Q('그러면 선하게 사는 일은 의미가 없다는 뜻인가요?','아닙니다. 선하게 사는 것은 귀하고 하나님도 기뻐하십니다. 다만 선행으로 <b>구원을 사는 것은 아니라는</b> 뜻입니다. 순서가 반대입니다. 선행으로 하나님께 가는 것이 아니라, 하나님의 은혜로 구원받은 사람이 감사함으로 선을 행하며 살게 됩니다(엡 2:10).')}
+${N('· 듣는 분이 직접 눌러 보게 하세요. 떨어질 때마다 "이것으로는 될까요?"<br>· 질문: "○○님은 무엇으로 이 간격을 건너려고 하셨나요?"<br>· 선행이 나쁘다는 인상을 주지 않도록 위 질문을 꼭 함께 다루세요.')}`},
+
+{id:'cross',t:'예수님의 십자가',cap:'하나님이 먼저 길을 여셨습니다',stage:'split deep cross dawn',enter:dropCross,html:`
+<div class="stepNo">5 · 예수님의 십자가</div>
+<h2>하나님이 먼저<br>구원의 길을 여셨습니다</h2>
+<p class="solo">사람이 하나님께 갈 수 없기에 <b>하나님이 사람에게 오셨습니다.</b> 예수님은 우리가 받아야 할 죄의 값을 대신 지고 십자가에서 죽으셨습니다.</p>
+<div class="btns"><button class="btn small ghost" onclick="replayCross()">▶ 다시 보기</button></div>
+${V('로마서 5:8','우리가 <b>아직 죄인 되었을 때에</b> 그리스도께서 우리를 위하여 죽으심으로 하나님께서 우리에 대한 자기의 사랑을 확증하셨느니라','green')}
+${V('베드로전서 3:18','그리스도께서도 단번에 죄를 위하여 죽으사 <b>의인으로서 불의한 자를 대신하셨으니</b> 이는 우리를 하나님 앞으로 인도하려 하심이라','green')}
+${Q('왜 예수님이 죽으셔야 했나요?','죄의 삯은 사망이기에 누군가는 그 값을 치러야 했습니다. 죄 없으신 예수님만이 남의 죄를 대신 질 수 있었습니다. 십자가는 하나님의 공의(죄는 반드시 값을 치름)와 사랑(그 값을 하나님이 스스로 치르심)이 함께 드러난 자리입니다.')}
+${N('· "대신(代身)"을 강조하세요: 내가 받을 사망을 예수님이 대신 받으셨습니다.<br>· 롬 5:8 — 우리가 착해진 다음이 아니라 "아직 죄인 되었을 때".')}`},
+
+{id:'risen',t:'다시 살아나신 예수님',cap:'예수님은 다시 살아나셨습니다',stage:'split deep cross dawn risen',html:`
+<div class="stepNo">6 · 부활</div>
+<h2>예수님은 죽으셨고,<br>다시 살아나셨습니다</h2>
+<p class="solo">십자가로 이야기가 끝나지 않습니다. 예수님은 사흘 만에 <b>다시 살아나셨습니다.</b> 복음은 과거의 희생을 기억하라는 말에 그치지 않고, <b>지금 살아 계신 예수님을 신뢰하며</b> 새로운 삶을 시작하라는 초대입니다.</p>
+<div class="btns"><button class="btn small ghost" onclick="replayRise()">▶ 다시 보기</button></div>
+${V('고린도전서 15:3-4','그리스도께서 성경대로 <b>우리 죄를 위하여 죽으시고</b> 장사 지낸 바 되셨다가 성경대로 <b>사흘 만에 다시 살아나사</b>','green')}
+${V('요한복음 14:6','예수께서 이르시되 <b>내가 곧 길이요</b> 진리요 생명이니 나로 말미암지 않고는 아버지께로 올 자가 없느니라','green')}
+${Q('부활이 왜 그렇게 중요한가요?','부활은 예수님의 십자가가 실제로 죄와 죽음을 이겼다는 하나님의 확증입니다. 그리고 우리가 믿는 분이 기념비 속 인물이 아니라 지금 살아서 나와 관계를 맺으실 수 있는 분이라는 뜻입니다. 그래서 믿음은 "사실 인정"을 넘어 "살아 계신 분을 신뢰함"이 됩니다.')}
+${N('· 다리는 무너지지 않았습니다 — 부활이 다리를 영원히 붙들고 있습니다.<br>· 고전 15:3-4는 바울이 "가장 먼저 전한 것"이라고 한 복음의 요약입니다.')}`},
+
+{id:'gift',t:'하나님의 선물',cap:'영생은 값없이 주시는 하나님의 선물',stage:'split deep cross dawn gift',html:`
+<div class="stepNo">7 · 하나님의 선물</div>
+<h2>구원은 보상이 아니라<br>선물입니다</h2>
+<p class="solo">선물은 일해서 버는 것이 아니라 <b>값없이 받는 것</b>입니다. 그림의 선물 상자를 열어 보세요.</p>
+<div class="btns"><button class="btn gold" onclick="openGift()">🎁 선물 열기</button></div>
+${V('로마서 6:23','죄의 삯은 사망이요 <b>하나님의 은사는</b> 그리스도 예수 우리 주 안에 있는 <b>영생</b>이니라','green')}
+<div class="cmp"><div class="a"><strong>죄의 삯</strong>내가 일한 대가<br>→ 마땅히 받는 것<br>→ <b>사망</b></div><div class="b"><strong>하나님의 은사</strong>값없이 주시는 선물<br>→ 받기만 하면 됨<br>→ <b>영생</b></div></div>
+<div class="bubble"><b>영생이란?</b> 단지 끝없이 오래 사는 것이 아닙니다. <b>하나님을 알고 그분과 함께 살아가는 생명</b>이며, 지금 시작되어 죽음 너머까지 이어지는 관계입니다.</div>
+${V('요한복음 17:3','<b>영생은 곧</b> 유일하신 참 하나님과 그가 보내신 자 예수 그리스도를 <b>아는 것이니이다</b>','green')}
+${V('에베소서 2:8-9','너희는 그 은혜에 의하여 믿음으로 말미암아 구원을 받았으니 이것은 너희에게서 난 것이 아니요 <b>하나님의 선물이라</b> 행위에서 난 것이 아니니 이는 누구든지 자랑하지 못하게 함이라','green')}
+${Q('공짜라면 너무 쉬운 것 아닌가요?','받는 사람에게는 값없지만, 주시는 하나님께는 가장 비싼 값—아들의 생명—이 치러진 선물입니다. 쉬워서가 아니라, 우리가 결코 갚을 수 없기에 선물로 주신 것입니다.')}
+${N('· 실제로 볼펜 같은 물건을 내밀며 "선물입니다" 해 보세요. 받으려면? → 손을 내밀어 받기만. 돈을 내면 더 이상 선물이 아닙니다.<br>· 롬 6:23 한 구절 전도: "죄", "선물", "영생"이라는 말을 각각 어떻게 생각하는지 물어보세요.')}`},
+
+{id:'story',t:'저의 이야기',cap:'저도 이 그림으로 예수님을 만났습니다',stage:'split deep cross dawn gift giftOpen',html:`
+<div class="stepNo">전하는 이의 이야기</div>
+<h2>저도 이 이야기를 듣고<br>예수님을 믿게 되었습니다</h2>
+<div class="verse"><div class="tx" style="line-height:1.85">${TESTIMONY}</div></div>
+${N('· 직접 함께 있을 때는 이 화면 대신 1~2분 동안 자신의 이야기로 나누세요: ① 예전에 하나님을 어떻게 생각했는지 ② 다리 예화에서 무엇을 깨달았는지 ③ 예수님을 믿는 것이 지금 내게 어떤 의미인지.<br>· "저처럼 느껴야 믿은 것"이라는 인상을 주지 않도록.')}`},
+
+{id:'respond',t:'나의 응답',cap:'당신은 지금 어느 편에 계십니까?',stage:'split deep cross dawn gift giftOpen',html:`
+<div class="stepNo">8 · 나의 응답</div>
+<h2>다리가 놓였습니다.<br>이제 건너가는 일이 남았습니다</h2>
+<p class="solo">예수님을 믿는다는 것은 이렇게 말할 수 있습니다.</p>
+<div class="cmp"><div class="a" style="background:#f3ece0"><strong>🔄 회개</strong>내가 주인 되어 가던 길에서 돌아서는 것</div><div class="b"><strong>🤝 믿음</strong>살아 계신 예수님께 나를 맡기는 것</div></div>
+${V('요한복음 1:12','<b>영접하는 자</b> 곧 그 이름을 믿는 자들에게는 <b>하나님의 자녀가 되는 권세</b>를 주셨으니','green')}
+${V('요한계시록 3:20','볼지어다 내가 <b>문 밖에 서서 두드리노니</b> 누구든지 내 음성을 듣고 <b>문을 열면</b> 내가 그에게로 들어가 그와 더불어 먹고 그는 나와 더불어 먹으리라','green')}
+${Q('믿는다는 것은 사실이라고 인정하는 것인가요?','인정하는 것에서 시작하지만 거기서 멈추지 않습니다. 의자가 튼튼하다는 것을 아는 것만으로는 쉴 수 없고, 실제로 앉아 몸을 맡겨야 합니다. 믿음은 예수님이 나를 위해 죽고 살아나셨다는 사실 위에 <b>나 자신을 맡기는 것</b>입니다.')}
+<div class="bubble">그림 속에서 당신은 지금 어디에 계신가요? 마음에 가까운 것을 골라 보세요.</div>
+<div class="btns" style="flex-direction:column">
+ <button class="btn gold" onclick="go(idx('pray'),1)">🙏 하나님께 기도하고 싶어요</button>
+ <button class="btn ghost" onclick="moreFaith()">📖 예수님을 믿는다는 뜻을 더 알고 싶어요</button>
+ <button class="btn ghost" onclick="go(idx('faq'),1)">❓ 아직 질문이 있어요</button>
+ <button class="btn ghost" onclick="pause()">🌙 오늘은 여기까지 살펴볼게요</button>
+ <button class="btn ghost" style="border-style:dashed" onclick="go(idx('assure'),1)">😊 이미 예수님을 믿고 있어요</button>
+</div>
+<div id="whereBox"></div>
+${N('· 그림의 사람을 가리키며 물어보세요. 강요하지 말고 기다려 주세요. 침묵도 괜찮습니다.<br>· 어떤 선택이든 존중하고, 다시 만날 약속이나 연락처를 남기세요.')}`},
+
+{id:'pray',t:'기도',cap:'믿음으로 다리를 건너갑니다',stage:'split deep cross dawn gift giftOpen',enter:()=>{if(prayed)setCrossed(true,false)},html:`
+<div class="stepNo">9 · 기도</div>
+<h2>마음을 하나님께<br>말씀드려 보세요</h2>
+<p style="font-size:.88em;color:var(--sub)">이 문장을 그대로 읽는 행위 자체가 구원을 주는 것은 아닙니다. 중요한 것은 예수님을 신뢰하며 하나님께 진실하게 나아가는 것입니다. 아래 기도는 마음을 표현하도록 돕는 <b>예시</b>입니다.</p>
+<div class="prayer">하나님,<br>저는 하나님을 떠나 제 뜻대로 살아온 죄인입니다. 용서해 주세요.<br>예수님께서 저의 죄를 위해 십자가에서 죽으시고 다시 살아나신 것을 믿습니다.<br>이제 제 길에서 돌아서서, 예수님을 저의 <b>구주와 주님으로 영접</b>합니다.<br>영생을 선물로 주셔서 감사합니다.<br>예수님의 이름으로 기도합니다. <b>아멘.</b></div>
+<div class="btns"><button class="btn gold" id="amenBtn" onclick="amen()">🙏 진심으로 이 기도를 드렸습니다</button></div>
+<div id="amenBox"></div>
+${Q('회개하면 완벽한 사람이 되어야 하나요?','아닙니다. 회개는 완벽해지겠다는 약속이 아니라 <b>방향을 바꾸는 것</b>입니다. 넘어질 때도 있지만, 하나님의 자녀는 다시 하나님께 돌아와 용서받고 자라 갑니다(요일 1:9).')}
+${N('· 전하는 이가 한 구절씩 먼저 읽고 따라 하게 하면 좋습니다.<br>· 기도 후 바로 확신의 말씀으로 넘어가세요. 감정이 아니라 약속에 근거합니다.')}`},
+
+{id:'assure',t:'확신',cap:'사망에서 생명으로 옮겼습니다',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,!prayed),html:`
+<div class="stepNo">10 · 확신</div>
+<h2>영생은 지금 이미<br>내 것입니다</h2>
+<p>빈칸을 눌러 하나님의 약속을 확인해 보세요.</p>
+<div class="verse green"><div class="ref">요한복음 5:24</div><div class="tx">내가 진실로 진실로 너희에게 이르노니 내 말을 듣고 또 나 보내신 이를 믿는 자는 영생을 <span class="blank" onclick="openB(this)">얻었고</span> 심판에 <span class="blank" onclick="openB(this)">이르지 아니하나니</span> 사망에서 생명으로 <span class="blank" onclick="openB(this)">옮겼느니라</span></div></div>
+<div id="blankMsg"></div>
+${V('요한일서 5:11-13','또 증거는 이것이니 하나님이 우리에게 영생을 주신 것과 이 생명이 그의 아들 안에 있는 그것이니라 <b>아들이 있는 자에게는 생명이 있고</b> 하나님의 아들이 없는 자에게는 생명이 없느니라 내가 하나님의 아들의 이름을 믿는 너희에게 이것을 쓰는 것은 너희로 하여금 <b>너희에게 영생이 있음을 알게</b> 하려 함이라','green')}
+<p class="solo" style="font-size:.9em;color:var(--sub)">확신은 기분이 아니라 <b>하나님의 말씀</b> 위에 서 있습니다.</p>
+<div class="train"><div style="background:#1F3A5F">🚂<br><b>사실</b><br>하나님의 말씀</div><div style="background:#2E7D5B">🚃<br><b>믿음</b><br>말씀을 신뢰</div><div style="background:#9a8a6a">🚃<br><b>감정</b><br>따라오는 것</div></div>
+${Q('아직 확신이 없어도 괜찮을까요?','괜찮습니다. 확신은 하루아침에 완성되지 않고 말씀을 읽으며 자랍니다. 질문이 남아 있다면 언제든 묻고, 요한복음을 하루 한 장씩 읽어 보세요. 하나님은 정직하게 찾는 사람을 만나 주십니다.')}
+${N('· 시제에 주목: "얻을 것이다"가 아니라 "얻었고", "옮겼느니라" — 이미 이루어진 사실.<br>· 기차 예화: 기관차(사실)가 끌고 석탄차(믿음)가 연료를 대고 객차(감정)는 따라옵니다.')}`},
+
+{id:'next',t:'그다음 걸음',cap:'하나님 편에서 시작되는 새 삶',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,false),html:`
+<div class="stepNo">11 · 그다음</div>
+<h2>새 생명이 자라가려면</h2>
+<p class="solo">갓 태어난 아기가 먹고 숨 쉬고 가족 안에서 자라듯, 그리스도인도 <b>네 가지</b>로 자라갑니다.</p>
+<svg viewBox="0 0 300 300" style="width:100%;max-width:280px;display:block;margin:6px auto">
+ <circle cx="150" cy="150" r="128" fill="none" stroke="#C9A227" stroke-width="10"/>
+ <line x1="150" y1="30" x2="150" y2="270" stroke="#1F3A5F" stroke-width="8"/>
+ <line x1="30" y1="150" x2="270" y2="150" stroke="#2E7D5B" stroke-width="8"/>
+ <circle cx="150" cy="150" r="40" fill="#1F3A5F"/>
+ <text x="150" y="147" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">그리스도</text>
+ <text x="150" y="165" text-anchor="middle" fill="#f7d58b" font-size="11">중심</text>
+ <g font-size="15" font-weight="800" text-anchor="middle">
+  <rect x="115" y="56" width="70" height="28" rx="8" fill="#fff" stroke="#1F3A5F"/><text x="150" y="76" fill="#1F3A5F">말씀</text>
+  <rect x="115" y="216" width="70" height="28" rx="8" fill="#fff" stroke="#1F3A5F"/><text x="150" y="236" fill="#1F3A5F">기도</text>
+  <rect x="36" y="136" width="62" height="28" rx="8" fill="#fff" stroke="#2E7D5B"/><text x="67" y="156" fill="#2E7D5B">교제</text>
+  <rect x="202" y="136" width="62" height="28" rx="8" fill="#fff" stroke="#2E7D5B"/><text x="233" y="156" fill="#2E7D5B">증거</text>
+ </g>
+ <text x="150" y="16" text-anchor="middle" fill="#9a7a10" font-size="12" font-weight="700">순종하는 그리스도인의 삶</text>
+</svg>
+<p style="font-size:.9em">📖 <b>말씀</b> — 요한복음을 하루 한 장씩<br>🙏 <b>기도</b> — 하나님께 무엇이든 말씀드리기<br>🤝 <b>교제</b> — 이 복음을 전해 준 사람, 교회와 함께<br>📣 <b>증거</b> — 받은 선물을 다른 이에게</p>
+<h2 style="font-size:1.1em;margin-top:16px">🎂 나의 영적 생일</h2>
+<input class="inp" id="bdName" placeholder="이름">
+<input class="inp" id="bdDate" type="date">
+<div class="btns"><button class="btn gold" onclick="makeCard()">영적 생일 카드 만들기</button></div>
+<div id="cardBox"></div>
+${N('· 수레바퀴: 힘은 중심(그리스도)에서 나옵니다. 세로 살(말씀·기도)은 하나님과, 가로 살(교제·증거)은 사람과의 관계.<br>· 일주일 안에 다시 만날 약속을 정하고, 요한복음을 함께 읽으며 양육을 시작하세요.')}`},
+
+{id:'summary',t:'한눈에 보기',cap:'하나님의 선물 영생 — 다리 예화',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,false),html:`
+<div class="stepNo">정리</div>
+<h2>한눈에 보는 복음</h2>
+<div class="verse"><div class="tx" style="font-size:.95em;line-height:1.9">
+① <b>하나님의 뜻</b> — 요 3:16, 요 10:10<br>
+② <b>우리의 현실 · 죄</b> — 롬 3:23, 사 53:6, 사 59:2<br>
+③ <b>죄의 결과</b> — 롬 6:23 앞, 히 9:27<br>
+④ <b>우리의 한계</b> — 엡 2:8-9<br>
+⑤ <b>십자가</b> — 롬 5:8, 벧전 3:18<br>
+⑥ <b>부활</b> — 고전 15:3-4, 요 14:6<br>
+⑦ <b>선물인 영생</b> — 롬 6:23, 요 17:3<br>
+⑧ <b>나의 응답</b> — 요 1:12, 계 3:20<br>
+⑨ <b>확신</b> — 요 5:24, 요일 5:11-13</div></div>
+<div class="btns"><button class="btn" onclick="go(0)">처음부터 다시</button><button class="btn ghost" onclick="share()">🔗 이 앱 보내기</button></div>
+${N('· 종이에 이 그림을 직접 그리며 다시 설명하고, 그 종이를 선물로 드리세요.<br>· 이해 확인 질문: "인간의 문제는 무엇이라고 했나요?" "예수님은 무엇을 하셨다고 이해하셨나요?" "믿는다는 것은 무엇이라고 느끼셨나요?" "이해되지 않는 표현은 어디였나요?"')}`},
+
+{id:'faq',t:'자주 묻는 질문',cap:'궁금한 것은 언제든 물어보세요',stage:'split deep cross dawn gift giftOpen risen',html:`
+<div class="stepNo">질문</div>
+<h2>아직 질문이 있으신가요?</h2>
+<p>질문하는 것은 믿음의 반대가 아닙니다. 궁금한 질문을 눌러 보세요.</p>
+<div id="faqAll"></div>
+<div class="bubble">여기 없는 질문은 이 앱을 전해 준 분께 직접 물어보세요. 기쁘게 함께 이야기할 것입니다.</div>
+<div class="btns"><button class="btn ghost" onclick="go(idx('respond'),-1)">◀ 나의 응답으로</button></div>`,enter:()=>{$('#faqAll').innerHTML=steps.filter(s=>s.id!=='faq').map(s=>(s.html.match(/<details class="faq">[\s\S]*?<\/details>/g)||[]).join('')).join('')}}
+];
+const idx=id=>steps.findIndex(s=>s.id===id);
+
+/* ---------- render ---------- */
+const dots=$('#dots');
+dots.innerHTML=steps.map(()=>'<i></i>').join('');
+$('#tocList').innerHTML=steps.map((s,i)=>`<button onclick="go(${i});toc(false)">${i===0?'·':i===steps.length-1?'★':i+'.'} ${s.t}</button>`).join('');
+
+function setStage(cls){
+  const keep=['crossed'].filter(c=>stage.classList.contains(c)&&cls.includes(c));
+  stage.className=cls;
+  document.querySelector('#fillerG').style.setProperty('--fg',cls.includes('joined')?1:0);
+}
+function go(i,dir){
+  if(i<0||i>=steps.length)return;
+  const prevCrossed=personX>200;
+  cur=i; const s=steps[i];
+  setStage(s.stage);
+  $('#stageCap').textContent=s.cap;
+  panel.innerHTML=s.html; panel.scrollTop=0; panel.firstElementChild&&panel.classList.remove('fade');
+  void panel.offsetWidth; panel.classList.add('fade');
+  [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i));
+  [...$('#tocList').children].forEach((d,k)=>d.classList.toggle('cur',k===i));
+  $('#prev').disabled=i===0; $('#prev').style.opacity=i===0?.4:1;
+  $('#next').textContent=i===steps.length-1?'처음 ↺':'다음 ▶';
+  speakStop();
+  const shouldCross=s.stage.includes('crossed')||(s.id==='pray'&&prayed);
+  if(!shouldCross&&prevCrossed) walkTo(85,500);
+  if(s.enter) s.enter(dir);
+  if(s.id==='pray'){ if(prayed){$('#amenBtn').disabled=true;$('#amenBox').innerHTML=welcome()} }
+  st.cur=i; save();
+}
+$('#next').onclick=()=>go(cur===steps.length-1?0:cur+1,1);
+$('#prev').onclick=()=>go(cur-1,-1);
+
+/* swipe */
+let sx=0,sy=0,stt=0;
+panel.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;stt=Date.now()},{passive:true});
+panel.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.8&&Date.now()-stt<700){ if(e.target.closest('input'))return; dx<0?$('#next').click():(cur>0&&go(cur-1,-1)); }},{passive:true});
+
+/* ---------- animations ---------- */
+function crack(dir){
+  if(dir===-1)return;
+  stage.classList.add('joined'); setStage('joined');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    setTimeout(()=>{ setStage('split night boltOn'); stage.querySelector('svg').classList.add('shake');
+      setTimeout(()=>{stage.querySelector('svg').classList.remove('shake');stage.classList.remove('boltOn')},1100);},350);
+  }));
+}
+function replayCrack(){ setStage('joined'); setTimeout(()=>crack(1),900); }
+function dropCross(dir){ if(dir===-1)return; setStage('split deep night'); setTimeout(()=>setStage(steps[idx('cross')].stage),400); }
+function replayCross(){ setStage('split deep night'); setTimeout(()=>setStage(steps[idx('cross')].stage),700); }
+function replayRise(){ setStage(steps[idx('cross')].stage); setTimeout(()=>setStage(steps[idx('risen')].stage),600); }
+function setMode(m,adv){ st.mode=m; st.notes=(m==='together'); save(); applyMode(); toast(m==='together'?'👥 함께 보기 — 📝 노트는 전하는 이용':'🙋 혼자 보기 — 🔊 로 읽어 주기'); if(adv) go(1,1); }
+function applyMode(){ const t=st.mode==='together'; document.body.classList.toggle('together',t); document.body.classList.toggle('showNotes',!!st.notes); $('#noteBtn').classList.toggle('on',!!st.notes); $('#modeBtn').textContent=t?'👥':'🙋'; }
+function moreFaith(){ $('#whereBox').innerHTML=`<div class="bubble fade"><b>믿음은 세 가지가 함께 있습니다.</b><br>① <b>알기</b> — 예수님이 누구시고 무엇을 하셨는지 압니다.<br>② <b>동의하기</b> — 그것이 나를 위한 사실임을 인정합니다.<br>③ <b>맡기기</b> — 내 삶을 예수님께 맡기고 따라갑니다.<br><br>세 번째가 바로 <b>영접</b>입니다. 문 밖에서 두드리시는 분께 문을 여는 것과 같습니다.</div><div class="btns"><button class="btn gold" onclick="go(idx('pray'),1)">🙏 기도하고 싶어요</button><button class="btn ghost" onclick="go(idx('faq'),1)">❓ 질문이 있어요</button></div>`; $('#whereBox').scrollIntoView({behavior:'smooth',block:'nearest'}); }
+function pause(){ $('#whereBox').innerHTML=`<div class="bubble fade">여기까지 함께 살펴봐 주셔서 감사합니다. 🙏<br>서두르지 않으셔도 됩니다. 이 앱은 언제든 다시 열어 보실 수 있고, 궁금한 것은 이 앱을 전해 준 분께 편하게 물어보세요.<br><br>마지막으로 요한복음을 한번 읽어 보시기를 권합니다. 예수님이 어떤 분인지 직접 만나 보실 수 있습니다.</div><div class="btns"><button class="btn ghost" onclick="go(idx('summary'),1)">📋 한눈에 다시 보기</button></div>`; $('#whereBox').scrollIntoView({behavior:'smooth',block:'nearest'}); }
+let speaking=false;
+function speakStop(){ try{speechSynthesis.cancel()}catch(e){} speaking=false; const b=$('#spkBtn'); b&&b.classList.remove('on'); }
+function speak(){ if(!('speechSynthesis' in window)){toast('이 기기는 음성 읽기를 지원하지 않습니다');return}
+  if(speaking){speakStop();return}
+  const c=panel.cloneNode(true); c.querySelectorAll('.note,details,button,svg,input,.btns,#cardBox,.solo').forEach(e=>{ if(e.classList.contains('solo')&&!document.body.classList.contains('together')) return; e.remove()});
+  c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent.replace(/(\d+):(\d+)-(\d+)/,'$1장 $2절에서 $3절').replace(/(\d+):(\d+)/,'$1장 $2절')+'. ');
+  c.querySelectorAll('.blank').forEach(b=>b.textContent=b.textContent);
+  const parts=c.innerText.split(/\n+/).map(t=>t.trim()).filter(Boolean);
+  const vs=speechSynthesis.getVoices().filter(v=>/ko/i.test(v.lang));
+  speaking=true; $('#spkBtn').classList.add('on');
+  parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t); u.lang='ko-KR'; if(vs[0])u.voice=vs[0]; u.rate=st.rate||0.95; if(k===parts.length-1)u.onend=()=>speakStop(); speechSynthesis.speak(u);});
+}
+function openGift(){ stage.classList.add('giftOpen'); toast('🎁 영생 — 값없이 주시는 선물'); }
+
+let tried=new Set();
+function tryPlank(btn,label,len){
+  const g=$('#planks'); const id='pk'+Date.now();
+  const y=146-(tried.size%3)*0;
+  g.insertAdjacentHTML('beforeend',`<g id="${id}" class="plank go"><rect x="150" y="${y}" width="${len}" height="8" rx="2" fill="#c9b48a" stroke="#8a7550"/><text x="${150+len/2}" y="${y-5}" text-anchor="middle" font-size="12" class="lbl" fill="#ffe7a8">${label}</text></g>`);
+  setTimeout(()=>document.getElementById(id)?.remove(),2500);
+  btn.style.textDecoration='line-through'; btn.style.opacity=.6;
+  tried.add(label);
+  const m=$('#effortMsg');
+  if(tried.size===1) m.innerHTML=`<div class="bubble fade">${label}(으)로는 저편에 닿지 못합니다. 다른 것도 눌러 보세요.</div>`;
+  else if(tried.size>=3) m.innerHTML=`<div class="bubble fade"><b>어떤 노력도 하나님께 닿지 못합니다.</b> 이 간격은 사람 편에서는 건널 수 없습니다.</div>${V('잠언 14:12','어떤 길은 사람이 보기에 바르나 <b>필경은 사망의 길</b>이니라','red')}${V('에베소서 2:9','<b>행위에서 난 것이 아니니</b> 이는 누구든지 자랑하지 못하게 함이라','red')}`;
+}
+
+function walkTo(x,ms=2200,cb){
+  const P=$('#P'); const x0=personX, t0=performance.now();
+  function f(t){ let k=Math.min(1,(t-t0)/ms); const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    personX=x0+(x-x0)*e; const onBeam=personX>140&&personX<262;
+    const bob=Math.abs(Math.sin(k*Math.PI*8))*2*(k<1?1:0);
+    P.setAttribute('transform',`translate(${personX.toFixed(1)} ${(onBeam?-4:0)-bob})`);
+    if(k<1)requestAnimationFrame(f); else cb&&cb(); }
+  requestAnimationFrame(f);
+}
+function setCrossed(on,animate){
+  if(on){ if(personX<200){ if(animate) walkTo(295,2400,()=>stage.classList.add('crossed')); else { personX=295; $('#P').setAttribute('transform','translate(295 0)'); } } }
+  else if(personX>200) walkTo(85,500);
+}
+function welcome(){return `<div class="card fade"><div class="big">하나님 가족이 되신 것을<br>환영합니다!</div><p style="margin:8px 0 0">"영접하는 자 곧 그 이름을 믿는 자들에게는 하나님의 자녀가 되는 권세를 주셨으니" (요 1:12)</p></div>`}
+function amen(){
+  if(prayed)return; prayed=true; $('#amenBtn').disabled=true;
+  stage.classList.remove('crossed');
+  walkTo(295,2600,()=>{stage.classList.add('crossed'); $('#amenBox').innerHTML=welcome(); toast('✨ 사망에서 생명으로!'); });
+}
+function openB(el){ el.classList.add('open'); if(document.querySelectorAll('.blank.open').length===3) $('#blankMsg').innerHTML='<div class="bubble fade">모두 <b>과거형</b>입니다. 믿는 순간 영생은 <b>이미</b> 나의 것입니다!</div>'; }
+
+/* spiritual birthday card */
+function makeCard(){
+  const name=($('#bdName').value||'').trim()||'나', d=$('#bdDate').value||new Date().toISOString().slice(0,10);
+  const [y,m,dd]=d.split('-');
+  const c=document.createElement('canvas'); c.width=1080;c.height=1350; const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,1350); g.addColorStop(0,'#14213a'); g.addColorStop(1,'#2c5282'); x.fillStyle=g; x.fillRect(0,0,1080,1350);
+  // mini bridge
+  x.fillStyle='#6f5d49'; x.fillRect(0,820,400,530); x.fillRect(680,820,400,530);
+  x.fillStyle='#6aa84f'; x.fillRect(0,815,400,14); x.fillRect(680,815,400,14);
+  x.fillStyle='#a8682f'; x.fillRect(522,640,36,710); x.fillRect(370,800,340,32);
+  const sun=x.createRadialGradient(850,560,10,850,560,180); sun.addColorStop(0,'#fffbe8'); sun.addColorStop(.5,'#ffe08a'); sun.addColorStop(1,'rgba(255,210,90,0)'); x.fillStyle=sun; x.fillRect(650,360,400,400);
+  x.textAlign='center'; const F='Pretendard, "Apple SD Gothic Neo", sans-serif';
+  x.fillStyle='#f7d58b'; x.font=`700 54px ${F}`; x.fillText('나의 영적 생일',540,170);
+  x.fillStyle='#fff'; x.font=`800 92px ${F}`; x.fillText(`${+y}년 ${+m}월 ${+dd}일`,540,300);
+  x.font=`700 60px ${F}`; x.fillText(name,540,400);
+  x.font=`500 34px ${F}`; x.fillStyle='#e9eef6';
+  ['내 말을 듣고 또 나 보내신 이를 믿는 자는','영생을 얻었고 심판에 이르지 아니하나니','사망에서 생명으로 옮겼느니라'].forEach((t,k)=>x.fillText(t,540,1040+k*56));
+  x.fillStyle='#f7d58b'; x.font=`700 32px ${F}`; x.fillText('요한복음 5:24',540,1230);
+  const url=c.toDataURL('image/png');
+  $('#cardBox').innerHTML=`<img src="${url}" style="width:100%;border-radius:14px;margin-top:8px" alt="영적 생일 카드"><div class="btns"><a class="btn" style="text-align:center;text-decoration:none;line-height:30px" href="${url}" download="영적생일_${name}.png">⬇ 이미지 저장</a></div><p style="font-size:.8em;color:#888">사진을 길게 눌러 저장하거나 공유할 수도 있습니다.</p>`;
+}
+
+function share(){
+  const u=location.href.split('#')[0];
+  if(navigator.share) navigator.share({title:'하나님의 선물 영생',text:'다리 예화로 보는 복음',url:u}).catch(()=>{});
+  else { navigator.clipboard?.writeText(u); toast('링크를 복사했습니다'); }
+}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function toc(o){$('#toc').classList.toggle('open',o)}
+$('#tocBtn').onclick=()=>toc(true);
+$('#toc').onclick=e=>{if(e.target.id==='toc')toc(false)};
+$('#noteBtn').onclick=()=>{const on=document.body.classList.toggle('showNotes');st.notes=on;save();$('#noteBtn').classList.toggle('on',on);toast(on?'📝 전하는 이 노트 켜짐':'노트 꺼짐 (듣는 분 화면)')};
+const sizes=[16,18,20,22]; $('#fsBtn').onclick=()=>{let k=sizes.indexOf(st.fs||18);st.fs=sizes[(k+1)%sizes.length];document.documentElement.style.setProperty('--fs',st.fs+'px');save();toast('글자 크기 '+st.fs)};
+$('#svg').addEventListener('click',e=>{ const id=steps[cur].id; if(id==='gift')openGift(); else if(id==='sin')replayCrack(); else if(id==='cross')replayCross(); else if(id==='risen')replayRise(); });
+$('#modeBtn').onclick=()=>setMode(st.mode==='together'?'alone':'together');
+$('#spkBtn').onclick=speak;
+applyMode();
+
+/* manifest + offline */
+const icon=`data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#14213a"/><rect x="0" y="330" width="190" height="182" fill="#7a6650"/><rect x="322" y="330" width="190" height="182" fill="#7a6650"/><rect x="238" y="170" width="36" height="342" fill="#c8843f"/><rect x="150" y="320" width="212" height="30" fill="#c8843f"/><circle cx="400" cy="170" r="60" fill="#ffe08a"/></svg>')}`;
+$('#mf').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify({name:'하나님의 선물 영생',short_name:'영생의 다리',start_url:location.href.split('#')[0],display:'standalone',background_color:'#14213a',theme_color:'#14213a',icons:[{src:icon,sizes:'512x512',type:'image/svg+xml',purpose:'any'}]}));
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+go(0);
+</script>
+</body>
+</html>
