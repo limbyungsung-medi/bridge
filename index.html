@@ -71,6 +71,9 @@ details.faq summary::-webkit-details-marker{display:none}
 details.faq[open] summary{background:#eef3f9}
 details.faq div{padding:10px 14px 14px;font-size:.92em;line-height:1.75}
 .together .solo{display:none}
+body[data-lang=zh]{word-break:normal;line-break:strict}
+#panel{overflow-x:hidden}
+#panel *{overflow-wrap:anywhere}
 #langPop{position:absolute;right:10px;top:56px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.25);padding:6px;display:none;z-index:25}
 #langPop.open{display:block}
 #langPop button{display:block;width:150px;text-align:left;border:0;background:none;font-family:inherit;font-size:17px;padding:12px 14px;border-radius:10px}
@@ -971,15 +974,33 @@ function speak(){ if(!('speechSynthesis' in window)){toast(L.noTTS);return}
   const c=panel.cloneNode(true);
   c.querySelectorAll('.note,details,button,svg,input,textarea,.btns,#cardBox,.langRow').forEach(e=>e.remove());
   if(document.body.classList.contains('together')) c.querySelectorAll('.solo').forEach(e=>e.remove());
-  if(st.lang==='ko') c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent.replace(/(\d+):(\d+)-(\d+)/,'$1장 $2절에서 $3절').replace(/(\d+):(\d+)/,'$1장 $2절')+'. ');
-  else c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent+'. ');
+  c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent+'. ');
   document.body.appendChild(c); c.style.cssText='position:absolute;left:-9999px;width:400px';
-  const parts=c.innerText.split(/\n+/).map(t=>t.trim()).filter(Boolean); c.remove();
+  const parts=c.innerText.split(/\n+/).map(t=>spoken(t.trim())).filter(Boolean); c.remove();
   const lang=L.tts, vs=speechSynthesis.getVoices().filter(v=>v.lang.replace('_','-').toLowerCase().startsWith(lang.slice(0,2)));
   speaking=true; $('#spkBtn').classList.add('on');
   parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t); u.lang=lang; if(vs[0])u.voice=vs[0]; u.rate=0.95; if(k===parts.length-1)u.onend=()=>speakStop(); speechSynthesis.speak(u);});
 }
 
+
+/* 성경 장·절을 소리 내어 읽기 좋게 바꾸기 */
+function sino(n){ n=+n; const d=['','일','이','삼','사','오','육','칠','팔','구']; let r='';
+  const h=Math.floor(n/100), t=Math.floor(n%100/10), o=n%10;
+  if(h) r+=(h>1?d[h]:'')+'백'; if(t) r+=(t>1?d[t]:'')+'십'; if(o) r+=d[o]; return r||'영'; }
+const KO_BOOKS={'롬':'로마서','사':'이사야','요':'요한복음','엡':'에베소서','요일':'요한일서','히':'히브리서','벧전':'베드로전서','고전':'고린도전서','계':'요한계시록','잠':'잠언','창':'창세기','마':'마태복음'};
+function spoken(t){
+  if(st.lang==='ko'){
+    t=t.replace(/(^|[\s(（—])(요일|벧전|고전|롬|사|요|엡|히|계|잠|창|마)\s+(?=\d)/g,(m,a,b)=>a+KO_BOOKS[b]+' ');
+    t=t.replace(/(\d+):(\d+)\s*-\s*(\d+)/g,(m,a,b,c)=>`${sino(a)}장 ${sino(b)}절에서 ${sino(c)}절`);
+    t=t.replace(/(\d+):(\d+)/g,(m,a,b)=>`${sino(a)}장 ${sino(b)}절`);
+    t=t.replace(/(\d+)\s*장/g,(m,a)=>sino(a)+'장').replace(/(\d+)\s*절/g,(m,a)=>sino(a)+'절');
+  } else if(st.lang==='zh'){
+    t=t.replace(/(\d+):(\d+)\s*-\s*(\d+)/g,'$1章$2节到$3节').replace(/(\d+):(\d+)/g,'$1章$2节');
+  } else {
+    t=t.replace(/(\d+):(\d+)\s*-\s*(\d+)/g,'chapter $1, verses $2 to $3').replace(/(\d+):(\d+)/g,'chapter $1, verse $2');
+  }
+  return t;
+}
 /* ---------- spiritual birthday card ---------- */
 function makeCard(){
   const name=($('#bdName').value||'').trim()||L.me, d=$('#bdDate').value||new Date().toISOString().slice(0,10);
