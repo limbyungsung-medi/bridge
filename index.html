@@ -76,6 +76,16 @@ details.faq summary::-webkit-details-marker{display:none}
 details.faq[open] summary{background:#eef3f9}
 details.faq div{padding:10px 14px 14px;font-size:.92em;line-height:1.75}
 .together .solo{display:none}
+#rdBar{position:absolute;left:8px;right:8px;bottom:calc(74px + env(safe-area-inset-bottom));display:none;gap:6px;background:rgba(20,33,58,.94);padding:6px;border-radius:16px;z-index:15;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+#rdBar.on{display:flex}
+#rdBar button{flex:1;min-height:44px;border:0;border-radius:11px;background:rgba(255,255,255,.12);color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap}
+#rdBar button.on{background:var(--gold);color:#14213a}
+#rdBar #rdRate{flex:0 0 58px} #rdBar #rdStop{flex:0 0 auto;padding:0 12px;background:#b23a3a}
+body:has(#rdBar.on) #panel{padding-bottom:90px}
+.rd-hide{display:none!important}
+.rd-now{background:#fff3c9!important;box-shadow:0 0 0 6px #fff3c9;border-radius:10px;transition:background .4s}
+.typing-caret::after{content:"▍";color:var(--gold);animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
 #bibleBtn{display:none} .hasBible #bibleBtn{display:inline-block}
 .hasBible .vref{color:var(--blue);text-decoration:underline dotted 1.5px;text-underline-offset:3px;cursor:pointer;border-radius:4px}
 .hasBible .vref:active{background:#e6eef8}
@@ -268,6 +278,7 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
 
   <div id="panel"></div>
 
+  <div id="rdBar"><button id="rdFollow" onclick="setReadStyle('follow')"></button><button id="rdType" onclick="setReadStyle('type')"></button><button id="rdRate" onclick="cycleRate()"></button><button id="rdStop" onclick="speakStop()"></button></div>
   <nav>
     <button class="nb" id="prev">◀ 이전</button>
     <div id="dots"></div>
@@ -319,6 +330,7 @@ ko:{title:'하나님의 선물 · 영생',sub:'다리 예화로 보는 복음',p
  tEdit:'✏️ 내 간증 넣기',tPaste:'📋 붙여넣기',tSave:'💾 저장',tCancel:'취소',tReset:'↩ 기본 간증으로',tSaved:'간증을 저장했습니다',
  tHelp:'전하는 분이 자신의 간증을 넣을 수 있습니다. 다른 곳에 써 둔 글을 복사해 와서 붙여넣기 하세요. 빈 줄은 문단 나눔이 됩니다. (이 휴대폰에만 저장됩니다)',
  tPasteFail:'붙여넣기를 할 수 없어요. 글상자를 길게 눌러 붙여넣기 하세요.',tResetQ:'기본 간증으로 되돌렸습니다',
+ rdFollow:'따라가기',rdType:'타자',rdStop:'멈춤',rdWait:'🔊 선택을 기다립니다 — 다음 ▶을 누르면 이어서 읽습니다',
  tts:'ko-KR',langName:'한국어'},
 en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next ▶',restart:'Restart ↺',toc:'Contents',
  tocHelp:'📝 helper notes on/off · 🔊 read aloud · 👥/🙋 together / on my own<br>Tap the picture to replay the animation. You can also swipe left or right.',
@@ -340,6 +352,7 @@ en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next 
  tEdit:'✏️ Add my story',tPaste:'📋 Paste',tSave:'💾 Save',tCancel:'Cancel',tReset:'↩ Default story',tSaved:'Your story has been saved',
  tHelp:'The person sharing can put in their own testimony. Copy it from elsewhere and paste it here. A blank line starts a new paragraph. (Saved only on this phone)',
  tPasteFail:'Cannot paste automatically. Long-press the text box and paste.',tResetQ:'Back to the default story',
+ rdFollow:'Follow',rdType:'Typing',rdStop:'Stop',rdWait:'🔊 Waiting — tap Next ▶ to keep listening',
  tts:'en-US',langName:'English'},
 zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:'下一步 ▶',restart:'重新开始 ↺',toc:'目录',
  tocHelp:'📝 传讲者笔记 · 🔊 朗读 · 👥/🙋 一起看 / 自己看<br>点图画可以重新播放动画，也可以左右滑动翻页。',
@@ -361,6 +374,7 @@ zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:
  tEdit:'✏️ 放入我的见证',tPaste:'📋 粘贴',tSave:'💾 保存',tCancel:'取消',tReset:'↩ 恢复默认见证',tSaved:'见证已保存',
  tHelp:'传讲者可以放入自己的见证。把在别处写好的文字复制后粘贴到这里。空一行就是分段。（只保存在这部手机上）',
  tPasteFail:'无法自动粘贴，请长按文字框粘贴。',tResetQ:'已恢复默认见证',
+ rdFollow:'跟读',rdType:'打字',rdStop:'停止',rdWait:'🔊 等待中——点“下一步 ▶”继续朗读',
  tts:'zh-CN',langName:'中文'}
 };
 
@@ -892,6 +906,7 @@ function setLang(l,keep){
   $('#tocList').innerHTML=steps.map((s,i)=>`<button onclick="go(${i});toc(false)">${i===0?'·':i}  ${s.t}</button>`).join('');
   [...document.querySelectorAll('#langPop button')].forEach(b=>b.classList.toggle('on',b.dataset.l===l));
   $('#langPop').classList.remove('open');
+  if(speaking) rdBarLabels();
   go(keep?cur:cur,0);
 }
 
@@ -900,7 +915,7 @@ function go(i,dir){
   if(i<0||i>=steps.length)return;
   const prevCrossed=personX>200;
   cur=i; const s=steps[i];
-  speakStop();
+  if(speaking){ rdGen++; clearTimeout(rdTimer); try{speechSynthesis.cancel()}catch(e){} restoreTyped(); }
   setStage(s.stage);
   $('#stageCap').textContent=s.cap;
   panel.innerHTML=s.html; panel.scrollTop=0; panel.classList.remove('fade'); void panel.offsetWidth; panel.classList.add('fade');
@@ -913,6 +928,7 @@ function go(i,dir){
   if(s.enter) s.enter(dir);
   if(s.id==='pray'&&prayed){$('#amenBtn').disabled=true;$('#amenBox').innerHTML=`<div class="card">${L.welcome}</div>`}
   st.cur=i; save();
+  if(speaking){ if(s.id==='start') go(1,1); else readStep({sin:1900,cross:1700,risen:1500}[s.id]||700); }
 }
 $('#next').onclick=()=>go(cur===steps.length-1?0:cur+1,1);
 $('#prev').onclick=()=>go(cur-1,-1);
@@ -964,7 +980,7 @@ function setCrossed(on,animate){
 function amen(){
   if(prayed)return; prayed=true; $('#amenBtn').disabled=true;
   stage.classList.remove('crossed');
-  walkTo(295,2600,()=>{stage.classList.add('crossed'); $('#amenBox').innerHTML=`<div class="card fade">${L.welcome}</div>`; toast(L.amenT); });
+  walkTo(295,2600,()=>{stage.classList.add('crossed'); $('#amenBox').innerHTML=`<div class="card fade">${L.welcome}</div>`; toast(L.amenT); if(speaking) rdTimer=setTimeout(()=>{ if(speaking) go(cur+1,1); },2500); });
 }
 function openB(el){ el.classList.add('open'); if(document.querySelectorAll('.blank.open').length===3) $('#blankMsg').innerHTML=`<div class="bubble fade">${L.blanks}</div>`; }
 function moreFaith(){ $('#whereBox').innerHTML=`<div class="bubble fade">${L.faith}</div><div class="btns"><button class="btn gold" onclick="go(idx('pray'),1)">${L.wantPray}</button><button class="btn ghost" onclick="go(idx('faq'),1)">${L.haveQ}</button></div>`; $('#whereBox').scrollIntoView({behavior:'smooth',block:'nearest'}); }
@@ -994,20 +1010,117 @@ function resetTesti(){ if(st.testi) delete st.testi[st.lang]; save(); renderTest
 /* ---------- mode / speech ---------- */
 function setMode(m,adv){ st.mode=m; st.notes=(m==='together'); save(); applyMode(); toast(m==='together'?L.mT:L.mA); if(adv) go(1,1); }
 function applyMode(){ const t=st.mode==='together'; document.body.classList.toggle('together',t); document.body.classList.toggle('showNotes',!!st.notes); $('#noteBtn').classList.toggle('on',!!st.notes); $('#modeBtn').textContent=t?'👥':'🙋'; }
-let speaking=false;
-function speakStop(){ try{speechSynthesis.cancel()}catch(e){} speaking=false; $('#spkBtn').classList.remove('on'); }
+/* ===== 읽어 주기 (🔊) =====
+   켜 두면 화면을 넘겨도 계속 읽고, 한 화면을 다 읽으면 다음 화면으로 넘어간다.
+   응답·기도 화면에서는 듣는 분의 선택을 기다리며 멈춘다.
+   보기 방식: 'follow' = 읽는 부분을 강조하고 따라 올라감 / 'type' = 타자 치듯 글자가 나타남 */
+let speaking=false, rdGen=0, rdTimer=null;
+const STOP_AT=['respond','pray','summary','faq'];
+const CPS={ko:6.5,en:13,zh:4.2};
+function rdStyle(){ return st.readStyle||'follow'; }
+function voiceFor(lang){ const vs=speechSynthesis.getVoices().filter(v=>v.lang.replace('_','-').toLowerCase().startsWith(lang.slice(0,2))); return vs.find(v=>/google|samsung|yuna|ting|siri/i.test(v.name))||vs[0]; }
+function speakStop(){
+  rdGen++; clearTimeout(rdTimer); try{speechSynthesis.cancel()}catch(e){}
+  speaking=false; $('#spkBtn').classList.remove('on'); $('#rdBar').classList.remove('on');
+  document.body.classList.remove('reading-type');
+  panel.querySelectorAll('.rd-hide').forEach(e=>e.classList.remove('rd-hide'));
+  panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
+  restoreTyped();
+}
 function speak(){ if(!('speechSynthesis' in window)){toast(L.noTTS);return}
   if(speaking){speakStop();return}
-  const c=panel.cloneNode(true);
-  c.querySelectorAll('.note,details,button,svg,input,textarea,.btns,#cardBox,.langRow').forEach(e=>e.remove());
-  if(document.body.classList.contains('together')) c.querySelectorAll('.solo').forEach(e=>e.remove());
-  c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent+'. ');
-  document.body.appendChild(c); c.style.cssText='position:absolute;left:-9999px;width:400px';
-  const parts=c.innerText.split(/\n+/).map(t=>spoken(t.trim())).filter(Boolean); c.remove();
-  const lang=L.tts, vs=speechSynthesis.getVoices().filter(v=>v.lang.replace('_','-').toLowerCase().startsWith(lang.slice(0,2)));
-  speaking=true; $('#spkBtn').classList.add('on');
-  parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t); u.lang=lang; if(vs[0])u.voice=vs[0]; u.rate=0.95; if(k===parts.length-1)u.onend=()=>speakStop(); speechSynthesis.speak(u);});
+  speaking=true; $('#spkBtn').classList.add('on'); $('#rdBar').classList.add('on'); rdBarLabels();
+  if(steps[cur].id==='start') go(1,1); else readStep(300);
 }
+function setReadStyle(s){ st.readStyle=s; save(); rdBarLabels(); if(speaking){ const g=rdGen; speakStop(); speaking=true; $('#spkBtn').classList.add('on'); $('#rdBar').classList.add('on'); readStep(200); } }
+function cycleRate(){ const r=[0.8,0.95,1.1,1.25]; let k=r.indexOf(st.rate||0.95); st.rate=r[(k+1)%r.length]; save(); rdBarLabels(); toast('× '+st.rate); }
+function rdBarLabels(){
+  $('#rdFollow').classList.toggle('on',rdStyle()==='follow'); $('#rdType').classList.toggle('on',rdStyle()==='type');
+  $('#rdFollow').textContent='📜 '+L.rdFollow; $('#rdType').textContent='⌨️ '+L.rdType; $('#rdStop').textContent='■ '+L.rdStop;
+  $('#rdRate').textContent=(st.rate||0.95).toFixed(2).replace(/0$/,'')+'×';
+}
+
+/* 읽을 덩어리: 화면 본문의 맨 위 칸들을 차례로 */
+function skippable(el){
+  return el.matches('.note,details,.btns,.langRow,svg,input,#cardBox,.stepNo,h2[style*="margin-top:16px"]') ||
+    (el.classList.contains('solo') && document.body.classList.contains('together'));
+}
+function unitText(el){
+  const c=el.cloneNode(true);
+  c.querySelectorAll('.note,details,button,.btns,svg,input,textarea').forEach(e=>e.remove());
+  c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent+'. ');
+  c.querySelectorAll('br').forEach(b=>b.replaceWith('\n'));
+  return spoken(c.textContent.replace(/\s*\n\s*/g,'\n').trim());
+}
+/* 타자 효과: 덩어리의 글자를 비웠다가 차례로 채운다 */
+let typed=null;
+function prepType(el){
+  const nodes=[]; const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+  while(tw.nextNode()){ const n=tw.currentNode; if(n.parentElement.closest('.note,details,.btns,svg')) continue; nodes.push([n,n.nodeValue]); }
+  const total=nodes.reduce((a,[,t])=>a+t.length,0);
+  nodes.forEach(([n])=>n.nodeValue='');
+  typed={el,nodes,total,shown:0}; el.classList.add('typing-caret');
+}
+function showTyped(frac){
+  if(!typed) return; const want=Math.round(typed.total*Math.min(1,frac)); if(want<=typed.shown) return;
+  let left=want; for(const [n,t] of typed.nodes){ const k=Math.min(t.length,left); if(n.nodeValue.length!==k) n.nodeValue=t.slice(0,k); left-=k; if(left<=0) break; }
+  typed.shown=want; keepVisible(typed.el,true);
+}
+function restoreTyped(){ if(!typed) return; typed.nodes.forEach(([n,t])=>n.nodeValue=t); typed.el.classList.remove('typing-caret'); typed=null; }
+function keepVisible(el,bottom){
+  const pr=panel.getBoundingClientRect(), r=el.getBoundingClientRect();
+  if(bottom){ if(r.bottom>pr.bottom-70) panel.scrollTop+=r.bottom-(pr.bottom-70); }
+  else el.scrollIntoView({block:'center',behavior:'smooth'});
+}
+
+function readStep(delay){
+  const gen=++rdGen; clearTimeout(rdTimer);
+  const typeMode=rdStyle()==='type';
+  document.body.classList.toggle('reading-type',typeMode);
+  const units=[...panel.children];
+  if(typeMode) units.forEach(u=>{ if(!u.matches('.stepNo')) u.classList.add('rd-hide'); });
+  panel.scrollTop=0;
+  let i=0;
+  const lang=L.tts, voice=voiceFor(lang), rate=st.rate||0.95, cps=(CPS[st.lang]||7)*rate/0.95;
+  const id=steps[cur].id;
+  if(id==='effort') [...panel.querySelectorAll('.btns .btn')].forEach((b,k)=>setTimeout(()=>{ if(gen===rdGen&&b.style.opacity!=='0.6') b.click(); },2500+k*1500));
+  if(id==='gift') setTimeout(()=>{ if(gen===rdGen) openGift(); },2500);
+  function next(){
+    if(gen!==rdGen) return;
+    restoreTyped(); panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
+    const live=[...panel.children];           /* 화면 중간에 새로 생긴 칸(판자 결과 등)도 읽는다 */
+    const el=live[i++];
+    if(!el){ return stepDone(); }
+    el.classList.remove('rd-hide');
+    if(skippable(el)) return next();
+    const text=unitText(el);
+    if(!text) return next();
+    if(typeMode) prepType(el); else { el.classList.add('rd-now'); keepVisible(el,false); }
+    const chunks=text.match(/[^.?!。？！\n]+[.?!。？！]*\s*|\n/g)||[text];
+    const S=chunks.join('').length; let off=0, ci=0;
+    function say(){
+      if(gen!==rdGen) return;
+      if(ci>=chunks.length){ showTyped(1); return setTimeout(next,350); }
+      const t=chunks[ci++]; const start=off; off+=t.length;
+      if(!t.trim()) return say();
+      const u=new SpeechSynthesisUtterance(t); u.lang=lang; if(voice)u.voice=voice; u.rate=rate;
+      let t0=0, bound=false, tick=null;
+      u.onstart=()=>{ t0=performance.now(); if(typeMode) tick=setInterval(()=>{ if(!bound) showTyped(Math.min(off,start+(performance.now()-t0)/1000*cps)/S); },60); };
+      u.onboundary=e=>{ if(typeof e.charIndex==='number'){ bound=true; showTyped(Math.min(off,start+e.charIndex+(e.charLength||2))/S); } };
+      u.onend=u.onerror=()=>{ clearInterval(tick); if(gen!==rdGen) return; showTyped(off/S); say(); };
+      speechSynthesis.speak(u);
+    }
+    say();
+  }
+  function stepDone(){
+    if(gen!==rdGen) return;
+    panel.querySelectorAll('.rd-hide').forEach(e=>e.classList.remove('rd-hide'));
+    if(STOP_AT.includes(id) || cur>=steps.length-1){ toast(L.rdWait); return; }
+    rdTimer=setTimeout(()=>{ if(gen===rdGen&&speaking) go(cur+1,1); },1400);
+  }
+  rdTimer=setTimeout(next,delay||0);
+}
+
 
 
 /* 성경 장·절을 소리 내어 읽기 좋게 바꾸기 */
@@ -1088,6 +1201,7 @@ function bibleUrl(go){
 }
 function openBible(go){
   if(!hasBible) return;
+  speakStop();
   st.cur=cur; save();
   try{ sessionStorage.setItem('bridge_prayed',prayed?'1':''); }catch(e){}
   location.href=bibleUrl(go);
