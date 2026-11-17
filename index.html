@@ -49,7 +49,7 @@ header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
 .split #sinTxt{opacity:1}
 #deepTxt{opacity:0;transition:opacity 1s .4s}
 .deep #deepTxt{opacity:1}
-#crossG{transform:translateY(-460px);opacity:0;transition:transform 1.3s cubic-bezier(.3,1.35,.5,1),opacity .2s}
+#crossG{transform:translateY(-460px);opacity:0;transition:transform 1.5s cubic-bezier(.22,.7,.3,1),opacity .2s}
 .cross #crossG{transform:translateY(0);opacity:1}
 .night #P circle:not(#halo),.night #P path{fill:#f2f2f2;stroke:#f2f2f2}
 .cross #sinTxt{opacity:.45}
@@ -69,7 +69,6 @@ header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
 #halo{opacity:0;transition:opacity 1s}
 #riseG{opacity:0;transform:scale(.2);transform-origin:200px 118px;transition:transform 1.8s cubic-bezier(.2,1.2,.4,1),opacity 1.2s}
 .risen #riseG{opacity:1;transform:scale(1)}
-.risen #crossG text{opacity:0}
 details.faq{background:#fff;border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}
 details.faq summary{padding:12px 14px;font-weight:700;color:var(--blue);list-style:none;cursor:pointer;font-size:.95em}
 details.faq summary::-webkit-details-marker{display:none}
@@ -235,7 +234,7 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
       <rect id="filler" class="tr" x="170" y="147.5" width="60" height="93" fill="url(#earthL)"/>
       <rect id="fillerG" x="170" y="147.5" width="60" height="5" fill="#6aa84f" style="opacity:var(--fg,1);transition:opacity 1s"/>
 
-      <g id="deepTxt"><text id="tDeath" class="lbl" x="188" y="232" text-anchor="end" font-size="17" fill="#ffadad">사망</text><text id="tJudg" class="lbl" x="212" y="232" text-anchor="start" font-size="17" fill="#ffadad">심판</text></g>
+      <g id="deepTxt"><text id="tDeath" class="lbl" x="180" y="232" text-anchor="end" font-size="17" fill="#ffadad">사망</text><text id="tJudg" class="lbl" x="220" y="232" text-anchor="start" font-size="17" fill="#ffadad">심판</text></g>
       <!-- crack bolt -->
       <path id="bolt" d="M200 60 L188 100 L206 108 L192 150 L210 160 L196 238" stroke="#ff4d4d" stroke-width="4" fill="none"/>
 
@@ -244,14 +243,15 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
         <g stroke="#fff6c8" stroke-width="3" stroke-linecap="round" opacity=".9">
           <line x1="200" y1="40" x2="200" y2="10"/><line x1="150" y1="60" x2="128" y2="38"/><line x1="250" y1="60" x2="272" y2="38"/>
           <line x1="122" y1="105" x2="92" y2="98"/><line x1="278" y1="105" x2="308" y2="98"/></g>
-        <text id="tRisen" class="lbl" x="200" y="84" text-anchor="middle" font-size="17" fill="#8a5a00">부활하신 예수님</text>
+        <text id="tRisen" class="lbl" x="200" y="70" text-anchor="middle" font-size="17" fill="#8a5a00">부활하신 예수님</text>
       </g>
       <!-- cross -->
       <g id="crossG">
         <ellipse id="crossGlow" cx="200" cy="140" rx="90" ry="70" fill="url(#glow)"/>
-        <rect x="193" y="92" width="14" height="150" rx="2" fill="url(#wood)"/>
-        <rect x="134" y="146" width="132" height="12" rx="2" fill="url(#wood)"/>
-        <text id="tJesus" class="lbl" x="200" y="84" text-anchor="middle" font-size="16" fill="#6a3510">예수 그리스도</text>
+        <rect x="186" y="82" width="28" height="160" rx="3" fill="url(#wood)" stroke="#5c3412" stroke-width="1.2"/>
+        <rect x="124" y="136" width="152" height="28" rx="3" fill="url(#wood)" stroke="#5c3412" stroke-width="1.2"/>
+        <rect x="186.6" y="136.6" width="26.8" height="26.8" fill="url(#wood)"/>
+        <text id="tJesus" x="200" y="155.5" text-anchor="middle" font-size="15" font-weight="800" fill="#fff8e6" stroke="#4a2a0e" stroke-width="2.4" paint-order="stroke" style="font-family:Pretendard,'PingFang SC',sans-serif;letter-spacing:.02em">예수 그리스도</text>
       </g>
 
       <!-- bonds -->
@@ -973,9 +973,9 @@ function tryPlank(btn,label,len){
 function walkTo(x,ms=2200,cb){
   const P=$('#P'); const x0=personX, t0=performance.now();
   function f(t){ let k=Math.min(1,(t-t0)/ms); const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
-    personX=x0+(x-x0)*e; const onBeam=personX>140&&personX<262;
+    personX=x0+(x-x0)*e; const lift=-14*Math.max(0,Math.min(1,Math.min(personX-116,284-personX)/12));
     const bob=Math.abs(Math.sin(k*Math.PI*8))*2*(k<1?1:0);
-    P.setAttribute('transform',`translate(${personX.toFixed(1)} ${(onBeam?-4:0)-bob})`);
+    P.setAttribute('transform',`translate(${personX.toFixed(1)} ${lift-bob})`);
     if(k<1)requestAnimationFrame(f); else cb&&cb(); }
   requestAnimationFrame(f);
 }
@@ -1244,7 +1244,8 @@ let hasBible=true;
   document.body.classList.toggle('hasBible',hasBible); })();
 
 function bibleUrl(go){
-  const v=st.lang==='en'?'&v=NIV':'';
+  const VER={en:'NIV',zh:'중국어 화합본(简体)'};
+  const v=VER[st.lang]?'&v='+encodeURIComponent(VER[st.lang]):'';
   return new URL('../bible-reading/',location.href).href+(go?`#go=${go}${v}&from=bridge`:'#from=bridge');
 }
 function openBible(go){
