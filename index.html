@@ -76,12 +76,14 @@ details.faq summary::-webkit-details-marker{display:none}
 details.faq[open] summary{background:#eef3f9}
 details.faq div{padding:10px 14px 14px;font-size:.92em;line-height:1.75}
 .together .solo{display:none}
-#rdBar{position:absolute;left:8px;right:8px;bottom:calc(74px + env(safe-area-inset-bottom));display:none;gap:6px;background:rgba(20,33,58,.94);padding:6px;border-radius:16px;z-index:15;box-shadow:0 4px 16px rgba(0,0,0,.25)}
-#rdBar.on{display:flex}
-#rdBar button{flex:1;min-height:44px;border:0;border-radius:11px;background:rgba(255,255,255,.12);color:#fff;font-family:inherit;font-size:14px;font-weight:700;white-space:nowrap}
+#rdBar{display:none;flex:1;gap:5px;min-width:0}
+body.speaking #rdBar{display:flex}
+body.speaking #dots{display:none}
+body.speaking nav .nb{min-width:46px;padding:0 10px}
+#rdBar button{flex:1;min-width:0;height:50px;border:0;border-radius:12px;background:#eef0f4;color:var(--blue);font-family:inherit;font-size:11px;font-weight:700;line-height:1.15;padding:2px}
+#rdBar button b{display:block;font-size:19px;line-height:1.1}
 #rdBar button.on{background:var(--gold);color:#14213a}
-#rdBar #rdRate{flex:0 0 58px} #rdBar #rdStop{flex:0 0 auto;padding:0 12px;background:#b23a3a}
-body:has(#rdBar.on) #panel{padding-bottom:90px}
+#rdBar #rdStop{background:#b23a3a;color:#fff}
 .rd-hide{display:none!important}
 .rd-now{background:#fff3c9!important;box-shadow:0 0 0 6px #fff3c9;border-radius:10px;transition:background .4s}
 .typing-caret::after{content:"▍";color:var(--gold);animation:blink .8s steps(1) infinite}
@@ -278,10 +280,10 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
 
   <div id="panel"></div>
 
-  <div id="rdBar"><button id="rdFollow" onclick="setReadStyle('follow')"></button><button id="rdType" onclick="setReadStyle('type')"></button><button id="rdRate" onclick="cycleRate()"></button><button id="rdStop" onclick="speakStop()"></button></div>
   <nav>
     <button class="nb" id="prev">◀ 이전</button>
     <div id="dots"></div>
+<div id="rdBar"><button id="rdFollow" onclick="setReadStyle('follow')"></button><button id="rdType" onclick="setReadStyle('type')"></button><button id="rdRate" onclick="cycleRate()"></button><button id="rdStop" onclick="speakStop()"></button></div>
     <button class="nb" id="next">다음 ▶</button>
   </nav>
 
@@ -897,7 +899,7 @@ function buildSteps(){ const C=CONTENT[st.lang](); steps=META.map(m=>({...m,...C
 function setLang(l,keep){
   st.lang=l; save(); L=UI[l]; document.documentElement.lang=l==='zh'?'zh-CN':l;
   document.body.dataset.lang=l;
-  $('#hTitle').textContent=L.title; $('#hSub').textContent=L.sub; $('#prev').textContent=L.prev; $('#tocH').textContent=L.toc; $('#tocHelp').innerHTML=L.tocHelp; $('#fsLbl').textContent=L.fs;
+  $('#hTitle').textContent=L.title; $('#hSub').textContent=L.sub; $('#tocH').textContent=L.toc; $('#tocHelp').innerHTML=L.tocHelp; $('#fsLbl').textContent=L.fs;
   const T={tMan:L.man,tGod:L.god,tSin:L.sin,tDeath:L.death,tJudg:L.judg,tJesus:L.jesus,tRisen:L.risen,lifeTxt:L.life};
   for(const k in T) $('#'+k).textContent=T[k];
   document.title=L.shareT;
@@ -922,7 +924,7 @@ function go(i,dir){
   [...$('#dots').children].forEach((d,k)=>d.classList.toggle('on',k===i));
   [...$('#tocList').children].forEach((d,k)=>d.classList.toggle('cur',k===i));
   $('#prev').disabled=i===0; $('#prev').style.opacity=i===0?.4:1;
-  $('#next').textContent=i===steps.length-1?L.restart:L.next;
+  navLabels();
   const shouldCross=s.stage.includes('crossed')||(s.id==='pray'&&prayed);
   if(!shouldCross&&prevCrossed) walkTo(85,500);
   if(s.enter) s.enter(dir);
@@ -1021,7 +1023,7 @@ function rdStyle(){ return st.readStyle||'follow'; }
 function voiceFor(lang){ const vs=speechSynthesis.getVoices().filter(v=>v.lang.replace('_','-').toLowerCase().startsWith(lang.slice(0,2))); return vs.find(v=>/google|samsung|yuna|ting|siri/i.test(v.name))||vs[0]; }
 function speakStop(){
   rdGen++; clearTimeout(rdTimer); try{speechSynthesis.cancel()}catch(e){}
-  speaking=false; $('#spkBtn').classList.remove('on'); $('#rdBar').classList.remove('on');
+  speaking=false; $('#spkBtn').classList.remove('on'); document.body.classList.remove('speaking'); navLabels();
   document.body.classList.remove('reading-type');
   panel.querySelectorAll('.rd-hide').forEach(e=>e.classList.remove('rd-hide'));
   panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
@@ -1029,15 +1031,17 @@ function speakStop(){
 }
 function speak(){ if(!('speechSynthesis' in window)){toast(L.noTTS);return}
   if(speaking){speakStop();return}
-  speaking=true; $('#spkBtn').classList.add('on'); $('#rdBar').classList.add('on'); rdBarLabels();
+  speaking=true; $('#spkBtn').classList.add('on'); document.body.classList.add('speaking'); rdBarLabels();
   if(steps[cur].id==='start') go(1,1); else readStep(300);
 }
-function setReadStyle(s){ st.readStyle=s; save(); rdBarLabels(); if(speaking){ const g=rdGen; speakStop(); speaking=true; $('#spkBtn').classList.add('on'); $('#rdBar').classList.add('on'); readStep(200); } }
+function setReadStyle(s){ st.readStyle=s; save(); rdBarLabels(); if(speaking){ const g=rdGen; speakStop(); speaking=true; $('#spkBtn').classList.add('on'); document.body.classList.add('speaking'); rdBarLabels(); readStep(200); } }
 function cycleRate(){ const r=[0.8,0.95,1.1,1.25]; let k=r.indexOf(st.rate||0.95); st.rate=r[(k+1)%r.length]; save(); rdBarLabels(); toast('× '+st.rate); }
+function navLabels(){ if(!L)return; $('#prev').textContent=speaking?'◀':L.prev; $('#next').textContent=speaking?'▶':(cur===steps.length-1?L.restart:L.next); }
 function rdBarLabels(){
   $('#rdFollow').classList.toggle('on',rdStyle()==='follow'); $('#rdType').classList.toggle('on',rdStyle()==='type');
-  $('#rdFollow').textContent='📜 '+L.rdFollow; $('#rdType').textContent='⌨️ '+L.rdType; $('#rdStop').textContent='■ '+L.rdStop;
-  $('#rdRate').textContent=(st.rate||0.95).toFixed(2).replace(/0$/,'')+'×';
+  $('#rdFollow').innerHTML='<b>📜</b>'+L.rdFollow; $('#rdType').innerHTML='<b>⌨️</b>'+L.rdType; $('#rdStop').innerHTML='<b>■</b>'+L.rdStop;
+  $('#rdRate').innerHTML='<b>🐢</b>'+(st.rate||0.95).toFixed(2).replace(/0$/,'')+'×';
+  navLabels();
 }
 
 /* 읽을 덩어리: 화면 본문의 맨 위 칸들을 차례로 */
@@ -1069,7 +1073,7 @@ function showTyped(frac){
 function restoreTyped(){ if(!typed) return; typed.nodes.forEach(([n,t])=>n.nodeValue=t); typed.el.classList.remove('typing-caret'); typed=null; }
 function keepVisible(el,bottom){
   const pr=panel.getBoundingClientRect(), r=el.getBoundingClientRect();
-  if(bottom){ if(r.bottom>pr.bottom-70) panel.scrollTop+=r.bottom-(pr.bottom-70); }
+  if(bottom){ if(r.bottom>pr.bottom-24) panel.scrollTop+=r.bottom-(pr.bottom-24); }
   else el.scrollIntoView({block:'center',behavior:'smooth'});
 }
 
