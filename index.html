@@ -85,9 +85,10 @@ body.speaking nav .nb{min-width:46px;padding:0 10px}
 #rdBar button.on{background:var(--gold);color:#14213a}
 #rdBar #rdStop{background:#b23a3a;color:#fff}
 .rd-hide{display:none!important}
-.rd-now{background:#fff3c9!important;box-shadow:0 0 0 6px #fff3c9;border-radius:10px;transition:background .4s}
+.rd-now{background:#fffaf0!important;box-shadow:0 0 0 6px #fffaf0;border-radius:10px;transition:background .4s}
 .typing-caret::after{content:"▍";color:var(--gold);animation:blink .8s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
+::highlight(rd){background-color:#ffe08a;color:#1a1a1a}
 #bibleBtn{display:none} .hasBible #bibleBtn{display:inline-block}
 .hasBible .vref{color:var(--blue);text-decoration:underline dotted 1.5px;text-underline-offset:3px;cursor:pointer;border-radius:4px}
 .hasBible .vref:active{background:#e6eef8}
@@ -1030,7 +1031,7 @@ function speakStop(){
   document.body.classList.remove('reading-type');
   panel.querySelectorAll('.rd-hide').forEach(e=>e.classList.remove('rd-hide'));
   panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
-  restoreTyped();
+  restoreTyped(); fol=null; try{CSS.highlights&&CSS.highlights.delete('rd')}catch(e){}
 }
 function speak(){ if(!('speechSynthesis' in window)){toast(L.noTTS);return}
   if(speaking){speakStop();return}
@@ -1057,7 +1058,7 @@ function unitText(el){
   c.querySelectorAll('.note,details,button,.btns,svg,input,textarea').forEach(e=>e.remove());
   c.querySelectorAll('.ref').forEach(r=>r.textContent=r.textContent+'. ');
   c.querySelectorAll('br').forEach(b=>b.replaceWith('\n'));
-  return spoken(c.textContent.replace(/\s*\n\s*/g,'\n').trim());
+  return c.textContent.replace(/\s*\n\s*/g,'\n').replace(/[ \t]+/g,' ').trim();
 }
 /* 타자 효과: 덩어리의 글자를 비웠다가 차례로 채운다 */
 let typed=null;
@@ -1080,6 +1081,45 @@ function keepVisible(el,bottom){
   else el.scrollIntoView({block:'center',behavior:'smooth'});
 }
 
+
+/* 긴 문장은 2~3 덩어리로 더 잘게 나눈다 (쉼표·연결어미·띄어쓰기 기준) */
+function splitChunks(text){
+  const base=text.match(/[^.?!。？！\n]+[.?!。？！]*\s*|\n/g)||[text];
+  const max=st.lang==='en'?90:st.lang==='zh'?28:36, out=[];
+  const W=st.lang==='zh'?[[/[；：]/g,3],[/[，、]/g,2]]:st.lang==='en'?[[/[;:]\s/g,3],[/,\s/g,2],[/\s(and|but|that|so)\s/g,1]]:
+    [[/(니라|이라|도다|리라|니이다|하더라)\s/g,4],[/(,\s|，)/g,3],[/(니|으며|하며|하고|하되|하여|하니)\s/g,2],[/(고|며|서|여|면|는데|지만)\s/g,1]];
+  base.forEach(c=>{
+    while(c.length>max*1.4){
+      let best=-1,bw=0,bd=1e9;
+      W.forEach(([re,w])=>{ re.lastIndex=0; let m; while((m=re.exec(c))){ const e=m.index+m[0].length; if(e<max*0.4||e>max*1.5||c.length-e<8) continue; const d=Math.abs(e-max); if(w>bw||(w===bw&&d<bd)){best=e;bw=w;bd=d;} } });
+      if(best<0){ best=c.lastIndexOf(' ',max); best=best<max*0.4?max:best+1; }
+      out.push(c.slice(0,best)); c=c.slice(best);
+    }
+    out.push(c);
+  });
+  return out;
+}
+let fol=null;
+function prepFollow(el){
+  const nodes=[]; const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+  while(tw.nextNode()){ const n=tw.currentNode; if(n.parentElement.closest('.note,details,.btns,svg')) continue; nodes.push(n); }
+  fol={el,nodes,total:nodes.reduce((a,n)=>a+n.nodeValue.length,0)};
+  const pr=panel.getBoundingClientRect(), r=el.getBoundingClientRect();
+  if(r.height>pr.height*0.6) panel.scrollTop+=r.top-pr.top-12; else keepVisible(el,false);
+}
+function posOf(k){ for(const n of fol.nodes){ if(k<=n.nodeValue.length) return [n,k]; k-=n.nodeValue.length; } const n=fol.nodes[fol.nodes.length-1]; return [n,n.nodeValue.length]; }
+function markChunk(fa,fb){
+  if(typed||!fol||!fol.nodes.length) return;
+  try{
+    const r=document.createRange(); const [n1,o1]=posOf(Math.floor(fa*fol.total)); const [n2,o2]=posOf(Math.ceil(fb*fol.total));
+    r.setStart(n1,o1); r.setEnd(n2,o2);
+    if(window.CSS&&CSS.highlights&&window.Highlight) CSS.highlights.set('rd',new Highlight(r));
+    const rc=r.getBoundingClientRect(), pr=panel.getBoundingClientRect();
+    if(rc.height&&(rc.top<pr.top+20||rc.bottom>pr.bottom-20)) panel.scrollBy({top:rc.top-(pr.top+pr.height*0.3),behavior:'smooth'});
+  }catch(e){}
+}
+function prog(f){ if(typed) showTyped(f); }
+
 function readStep(delay){
   const gen=++rdGen; clearTimeout(rdTimer);
   const typeMode=rdStyle()==='type';
@@ -1094,7 +1134,7 @@ function readStep(delay){
   if(id==='gift') setTimeout(()=>{ if(gen===rdGen) openGift(); },2500);
   function next(){
     if(gen!==rdGen) return;
-    restoreTyped(); panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
+    restoreTyped(); fol=null; try{CSS.highlights&&CSS.highlights.delete('rd')}catch(e){} panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
     const live=[...panel.children];           /* 화면 중간에 새로 생긴 칸(판자 결과 등)도 읽는다 */
     const el=live[i++];
     if(!el){ return stepDone(); }
@@ -1102,19 +1142,20 @@ function readStep(delay){
     if(skippable(el)) return next();
     const text=unitText(el);
     if(!text) return next();
-    if(typeMode) prepType(el); else { el.classList.add('rd-now'); keepVisible(el,false); }
-    const chunks=text.match(/[^.?!。？！\n]+[.?!。？！]*\s*|\n/g)||[text];
+    if(typeMode) prepType(el); else { el.classList.add('rd-now'); prepFollow(el); }
+    const chunks=splitChunks(text);
     const S=chunks.join('').length; let off=0, ci=0;
     function say(){
       if(gen!==rdGen) return;
-      if(ci>=chunks.length){ showTyped(1); return setTimeout(next,350); }
+      if(ci>=chunks.length){ prog(1); return setTimeout(next,350); }
       const t=chunks[ci++]; const start=off; off+=t.length;
       if(!t.trim()) return say();
-      const u=new SpeechSynthesisUtterance(t); u.lang=lang; if(voice)u.voice=voice; u.rate=rate;
+      const u=new SpeechSynthesisUtterance(spoken(t)); u.lang=lang; if(voice)u.voice=voice; u.rate=rate;
       let t0=0, bound=false, tick=null;
-      u.onstart=()=>{ t0=performance.now(); if(typeMode) tick=setInterval(()=>{ if(!bound) showTyped(Math.min(off,start+(performance.now()-t0)/1000*cps)/S); },60); };
-      u.onboundary=e=>{ if(typeof e.charIndex==='number'){ bound=true; showTyped(Math.min(off,start+e.charIndex+(e.charLength||2))/S); } };
-      u.onend=u.onerror=()=>{ clearInterval(tick); if(gen!==rdGen) return; showTyped(off/S); say(); };
+      markChunk(start/S,off/S);
+      u.onstart=()=>{ t0=performance.now(); if(typeMode) tick=setInterval(()=>{ if(!bound) prog(Math.min(off,start+(performance.now()-t0)/1000*cps)/S); },60); };
+      u.onboundary=e=>{ if(typeof e.charIndex==='number'){ bound=true; prog(Math.min(off,start+e.charIndex+(e.charLength||2))/S); } };
+      u.onend=u.onerror=()=>{ clearInterval(tick); if(gen!==rdGen) return; prog(off/S); say(); };
       speechSynthesis.speak(u);
     }
     say();
