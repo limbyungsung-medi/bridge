@@ -33,9 +33,9 @@ header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
 /* stage */
 #stage{position:relative;flex:0 0 auto;height:min(44vh,340px);overflow:hidden}
 .sky{position:absolute;inset:0;transition:opacity 1.4s ease}
-#skyDay{background:linear-gradient(#8fc3ea,#e9f3fb 70%)}
+#skyDay{background:linear-gradient(#FBF7EE,#F3EBD9)}
 #skyNight{background:linear-gradient(#0b1020,#2a2f4a 75%);opacity:0}
-#skyDawn{background:linear-gradient(#f7d58b,#fff3d6 55%,#fde9c4);opacity:0}
+#skyDawn{background:linear-gradient(#FBF4E1,#F4E6C4);opacity:0}
 .night #skyNight{opacity:1}
 .dawn #skyDawn{opacity:1}
 #stage svg{position:absolute;inset:0;width:100%;height:100%}
@@ -119,8 +119,7 @@ body[data-lang=zh]{word-break:normal;line-break:strict}
 .langRow button{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;min-height:44px;font-family:inherit;font-size:.9em;color:var(--blue);font-weight:700}
 body[data-lang=ko] .langRow button:first-child,body[data-lang=en] .langRow button:nth-child(2),body[data-lang=zh] .langRow button:nth-child(3){background:var(--blue);color:#fff}
 textarea.inp{resize:vertical;font-size:.95em}
-#svg .lbl{paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2.5px}
-#tJesus,#tRisen,#lifeTxt{stroke:rgba(255,255,255,.7)!important}
+
 .crossed #halo{opacity:1}
 #rays{opacity:.6;transform-origin:330px 92px;animation:spin 40s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -190,6 +189,59 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
 #toc button.cur{color:var(--blue);font-weight:800}
 #toast{position:absolute;left:50%;top:70px;transform:translateX(-50%);background:rgba(20,33,58,.92);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:30;white-space:nowrap}
 #toast.on{opacity:1}
+/* ===== 테마: 남색 · 아이보리 · 금색 (2026-11-18) ===== */
+:root{--navy:#1A2150;--navy2:#232C66;--navy3:#2C3678;--ivory:#F7F2E6;--gold2:#E2C46A}
+html,body{background:#141A40}
+#app{background:var(--navy);color:var(--ivory)}
+header{background:#141A40}
+.hb{background:rgba(255,255,255,.09)}
+.hb.on{background:var(--gold2);color:var(--navy)}
+#panel{color:#EDE8DA}
+.stepNo{color:var(--gold2)}
+h2{color:#fff}
+p{color:#E7E2D4}
+.verse{background:var(--navy2);border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--gold2);box-shadow:none}
+.verse .ref{color:var(--gold2)}
+.verse .tx{color:#F4F0E6}
+.verse b{background:linear-gradient(transparent 64%,rgba(226,196,106,.38) 64%);color:#fff}
+.verse.red{border-left-color:#E08A8A} .verse.red b{background:linear-gradient(transparent 64%,rgba(224,138,138,.35) 64%)}
+.verse.green{border-left-color:#86C9A6} .verse.green b{background:linear-gradient(transparent 64%,rgba(134,201,166,.33) 64%)}
+.btn{background:var(--gold2);color:var(--navy)}
+.btn.gold{background:var(--gold2);color:var(--navy)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.45)}
+.bubble{background:rgba(255,255,255,.08);color:#F1EDE2}
+.bubble.me{background:rgba(226,196,106,.16)}
+.note{background:#10153A;border:1px solid rgba(226,196,106,.45);color:#D9DDEE}
+.cmp .a{background:rgba(224,138,138,.14);color:#F1EDE2} .cmp .b{background:rgba(134,201,166,.14);color:#F1EDE2}
+.cmp .a[style]{background:rgba(226,196,106,.12)!important}
+.blank{background:rgba(255,255,255,.1);border-bottom-color:var(--gold2)}
+.blank.open{color:#9DE0BC;background:rgba(134,201,166,.15);border-color:#86C9A6}
+.prayer{background:rgba(255,255,255,.05);border:1.5px dashed rgba(226,196,106,.7);color:#F4F0E6}
+.card{background:linear-gradient(135deg,#2C3678,#1A2150);border:1px solid rgba(226,196,106,.5)}
+input.inp,textarea.inp{background:var(--navy2);color:#fff;border-color:rgba(255,255,255,.18)}
+details.faq{background:var(--navy2);border-color:rgba(255,255,255,.08)}
+details.faq summary{color:var(--gold2)}
+details.faq[open] summary{background:rgba(255,255,255,.05)}
+details.faq div{color:#E7E2D4}
+nav{background:#141A40;border-top:1px solid rgba(255,255,255,.08)}
+#prev{background:rgba(255,255,255,.1);color:#fff}
+#next{background:var(--gold2);color:var(--navy)}
+#dots i{background:rgba(255,255,255,.22)} #dots i.on{background:var(--gold2)}
+#rdBar button{background:rgba(255,255,255,.1);color:#fff}
+#rdBar button.on{background:var(--gold2);color:var(--navy)}
+.langRow button{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+body[data-lang=ko] .langRow button:first-child,body[data-lang=en] .langRow button:nth-child(2),body[data-lang=zh] .langRow button:nth-child(3){background:var(--gold2);color:var(--navy)}
+.hasBible .vref{color:var(--gold2)}
+.hasBible .note .vref{color:#F3D98E}
+.rd-now{background:rgba(255,255,255,.06)!important;box-shadow:0 0 0 6px rgba(255,255,255,.06)}
+::highlight(rd){background-color:#E2C46A;color:#1A2150}
+.train2{border-bottom-color:#8A90B8} .train2::after{background:repeating-linear-gradient(90deg,#8A90B8 0 6px,transparent 6px 16px)}
+#stageCap{background:rgba(26,33,80,.82)}
+.night #P circle:not(#halo),.night #P path{fill:#F7F2E6;stroke:#F7F2E6}
+#tRisen,#lifeTxt{fill:#8A6200}
+#tMan,#tGod{fill:#F7F2E6}
+#halo{opacity:0!important}
+
 </style>
 </head>
 <body>
@@ -209,7 +261,7 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
         <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241616"/><stop offset=".45" stop-color="#0a0606"/><stop offset="1" stop-color="#000"/></linearGradient>
         <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a4a22"/><stop offset=".5" stop-color="#a8682f"/><stop offset="1" stop-color="#7a4a22"/></linearGradient>
         <radialGradient id="glow"><stop offset="0" stop-color="#fff2b8" stop-opacity=".9"/><stop offset="1" stop-color="#fff2b8" stop-opacity="0"/></radialGradient>
-        <linearGradient id="earthL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6650"/><stop offset="1" stop-color="#4a3c2f"/></linearGradient>
+        <linearGradient id="earthL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3A78"/><stop offset="1" stop-color="#1F2756"/></linearGradient>
       </defs>
 
       <!-- chasm -->
@@ -223,35 +275,33 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
       <!-- cliffs -->
       <g id="L" class="tr">
         <path d="M-60 150 L150 150 L141 172 L151 196 L136 240 L-60 240 Z" fill="url(#earthL)"/>
-        <path d="M-60 150 L150 150" stroke="#6aa84f" stroke-width="5"/>
+        <path d="M-60 150 L150 150" stroke="#D4B15A" stroke-width="2"/>
         <text id="tMan" class="lbl" x="70" y="192" text-anchor="middle" font-size="21" fill="#fff">사람</text>
       </g>
       <g id="R" class="tr">
         <path d="M250 150 L460 150 L460 240 L264 240 L250 212 L262 182 Z" fill="url(#earthL)"/>
-        <path d="M250 150 L460 150" stroke="#6aa84f" stroke-width="5"/>
+        <path d="M250 150 L460 150" stroke="#D4B15A" stroke-width="2"/>
         <text id="tGod" class="lbl" x="330" y="192" text-anchor="middle" font-size="21" fill="#fff">하나님</text>
       </g>
-      <rect id="filler" class="tr" x="170" y="147.5" width="60" height="93" fill="url(#earthL)"/>
-      <rect id="fillerG" x="170" y="147.5" width="60" height="5" fill="#6aa84f" style="opacity:var(--fg,1);transition:opacity 1s"/>
+      <rect id="filler" class="tr" x="170" y="150" width="60" height="91" fill="url(#earthL)"/>
+      <rect id="fillerG" x="170" y="149" width="60" height="2" fill="#D4B15A" style="opacity:var(--fg,1);transition:opacity 1s"/>
 
       <g id="deepTxt"><text id="tDeath" class="lbl" x="180" y="232" text-anchor="end" font-size="17" fill="#ffadad">사망</text><text id="tJudg" class="lbl" x="220" y="232" text-anchor="start" font-size="17" fill="#ffadad">심판</text></g>
       <!-- crack bolt -->
       <path id="bolt" d="M200 60 L188 100 L206 108 L192 150 L210 160 L196 238" stroke="#ff4d4d" stroke-width="4" fill="none"/>
 
       <g id="riseG">
-        <circle cx="200" cy="118" r="120" fill="url(#glow)"/>
-        <g stroke="#fff6c8" stroke-width="3" stroke-linecap="round" opacity=".9">
+        <g stroke="#C9A227" stroke-width="2.5" stroke-linecap="round" opacity=".75">
           <line x1="200" y1="40" x2="200" y2="10"/><line x1="150" y1="60" x2="128" y2="38"/><line x1="250" y1="60" x2="272" y2="38"/>
           <line x1="122" y1="105" x2="92" y2="98"/><line x1="278" y1="105" x2="308" y2="98"/></g>
         <text id="tRisen" class="lbl" x="200" y="70" text-anchor="middle" font-size="17" fill="#8a5a00">부활하신 예수님</text>
       </g>
       <!-- cross -->
       <g id="crossG">
-        <ellipse id="crossGlow" cx="200" cy="140" rx="90" ry="70" fill="url(#glow)"/>
         <rect x="186" y="82" width="28" height="160" rx="3" fill="url(#wood)" stroke="#5c3412" stroke-width="1.2"/>
         <rect x="124" y="136" width="152" height="28" rx="3" fill="url(#wood)" stroke="#5c3412" stroke-width="1.2"/>
         <rect x="186.6" y="136.6" width="26.8" height="26.8" fill="url(#wood)"/>
-        <text id="tJesus" x="200" y="155.5" text-anchor="middle" font-size="15" font-weight="800" fill="#fff8e6" stroke="#4a2a0e" stroke-width="2.4" paint-order="stroke" style="font-family:Pretendard,'PingFang SC',sans-serif;letter-spacing:.02em">예수 그리스도</text>
+        <text id="tJesus" x="200" y="155.5" text-anchor="middle" font-size="15" font-weight="800" fill="#FFF6DE" style="font-family:Pretendard,'PingFang SC',sans-serif;letter-spacing:.02em">예수 그리스도</text>
       </g>
 
       <!-- bonds -->
@@ -262,18 +312,18 @@ nav .nb{min-width:84px;height:50px;border-radius:14px;border:0;font-size:16px;fo
       <g id="giftG">
         <text id="lifeTxt" class="lbl" x="352" y="110" text-anchor="middle" font-size="19" fill="#9a6a00">영생</text>
         <g id="box">
-        <rect x="352" y="128" width="26" height="20" fill="#c0392b" rx="2"/>
-        <rect x="363" y="128" width="4" height="20" fill="#f1c40f"/>
-        <g id="lid"><rect x="349" y="121" width="32" height="8" fill="#e74c3c" rx="2"/><rect x="363" y="121" width="4" height="8" fill="#f1c40f"/>
-          <path d="M365 121 q-8 -9 -12 -2 q4 4 12 2 q8 -9 12 -2 q-4 4 -12 2" fill="#f1c40f"/></g>
+        <rect x="352" y="128" width="26" height="20" fill="#1F2756" rx="2"/>
+        <rect x="363" y="128" width="4" height="20" fill="#D4B15A"/>
+        <g id="lid"><rect x="349" y="121" width="32" height="8" fill="#2E3A78" rx="2"/><rect x="363" y="121" width="4" height="8" fill="#D4B15A"/>
+          <path d="M365 121 q-8 -9 -12 -2 q4 4 12 2 q8 -9 12 -2 q-4 4 -12 2" fill="#D4B15A"/></g>
         </g>
       </g>
 
       <!-- person -->
       <g id="P" transform="translate(85 0)">
         <circle id="halo" cx="0" cy="118" r="20" fill="url(#glow)"/>
-        <circle cx="0" cy="113" r="6" fill="#2b2b2b"/>
-        <path d="M0 119 L0 136 M0 124 L-8 131 M0 124 L8 131 M0 136 L-6 148 M0 136 L6 148" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="0" cy="113" r="6" fill="#1F2756"/>
+        <path d="M0 119 L0 136 M0 124 L-8 131 M0 124 L8 131 M0 136 L-6 148 M0 136 L6 148" stroke="#1F2756" stroke-width="3" stroke-linecap="round" fill="none"/>
       </g>
     </svg>
     <div id="stageCap"></div>
@@ -425,21 +475,26 @@ const META=[
 ];
 
 const LANGBTNS=`<div class="langRow"><button onclick="setLang('ko')">한국어</button><button onclick="setLang('en')">English</button><button onclick="setLang('zh')">中文</button></div>`;
-const WHEEL=(w,p,f,e,c,ct,rim)=>`<svg viewBox="0 0 300 300" style="width:100%;max-width:280px;display:block;margin:6px auto">
- <circle cx="150" cy="150" r="128" fill="none" stroke="#C9A227" stroke-width="10"/>
- <line x1="150" y1="30" x2="150" y2="270" stroke="#1F3A5F" stroke-width="8"/>
- <line x1="30" y1="150" x2="270" y2="150" stroke="#2E7D5B" stroke-width="8"/>
- <circle cx="150" cy="150" r="42" fill="#1F3A5F"/>
- <text x="150" y="148" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">${c}</text>
- <text x="150" y="166" text-anchor="middle" fill="#f7d58b" font-size="12">${ct}</text>
- <g font-size="16" font-weight="800" text-anchor="middle">
-  <rect x="105" y="54" width="90" height="30" rx="8" fill="#fff" stroke="#1F3A5F"/><text x="150" y="75" fill="#1F3A5F">${w}</text>
-  <rect x="105" y="216" width="90" height="30" rx="8" fill="#fff" stroke="#1F3A5F"/><text x="150" y="237" fill="#1F3A5F">${p}</text>
-  <rect x="22" y="135" width="86" height="30" rx="8" fill="#fff" stroke="#2E7D5B"/><text x="65" y="156" fill="#2E7D5B">${f}</text>
-  <rect x="192" y="135" width="86" height="30" rx="8" fill="#fff" stroke="#2E7D5B"/><text x="235" y="156" fill="#2E7D5B">${e}</text>
+const WHEEL=(w,p,f,e,c,ct,rim)=>`<svg viewBox="0 0 320 320" style="width:100%;max-width:300px;display:block;margin:10px auto">
+ <defs><path id="rimArc" d="M 41 160 A 119 119 0 0 1 279 160"/><path id="rimArc2" d="M 32 160 A 128 128 0 0 0 288 160"/>
+  <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9CF85"/><stop offset="1" stop-color="#B68C2C"/></linearGradient></defs>
+ <circle cx="160" cy="160" r="124" fill="none" stroke="url(#wg)" stroke-width="34"/>
+ <circle cx="160" cy="160" r="141" fill="none" stroke="#8C6A1E" stroke-width="1"/><circle cx="160" cy="160" r="107" fill="none" stroke="#8C6A1E" stroke-width="1"/>
+ <text font-size="15" font-weight="800" fill="#1A2150" letter-spacing="1.5"><textPath href="#rimArc" startOffset="50%" text-anchor="middle">${rim}</textPath></text>
+ <text font-size="12" font-weight="800" fill="#1A2150" letter-spacing="1"><textPath href="#rimArc2" startOffset="50%" text-anchor="middle">${RIMSUB[st.lang]||''}</textPath></text>
+ <rect x="149" y="53" width="22" height="214" fill="url(#wg)"/><rect x="53" y="149" width="214" height="22" fill="url(#wg)"/>
+ <circle cx="160" cy="160" r="44" fill="#1A2150" stroke="#E9CF85" stroke-width="3"/>
+ <text x="160" y="158" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">${c}</text>
+ <text x="160" y="176" text-anchor="middle" fill="#E9CF85" font-size="12">${ct}</text>
+ <g font-size="15" font-weight="800" text-anchor="middle">
+  <rect x="117" y="62" width="86" height="28" rx="14" fill="#fff"/><text x="160" y="81" fill="#1A2150">${w}</text>
+  <rect x="117" y="230" width="86" height="28" rx="14" fill="#fff"/><text x="160" y="249" fill="#1A2150">${p}</text>
+  <rect x="30" y="146" width="86" height="28" rx="14" fill="#fff"/><text x="73" y="165" fill="#1A2150" font-size="${st.lang==='en'?12.5:15}">${f}</text>
+  <rect x="204" y="146" width="86" height="28" rx="14" fill="#fff"/><text x="247" y="165" fill="#1A2150" font-size="${st.lang==='en'?12.5:15}">${e}</text>
  </g>
- <text x="150" y="15" text-anchor="middle" fill="#9a7a10" font-size="13" font-weight="700">${rim}</text>
 </svg>`;
+const RIMSUB={ko:'테 · 순종',en:'RIM · OBEDIENCE',zh:'轮圈 · 顺服'};
+
 
 /* ===== 단계 내용 (언어별) ===== */
 const CONTENT={
@@ -574,7 +629,7 @@ next:{t:'그다음 걸음',cap:'하나님 편에서 시작되는 새 삶',html:`
 <h2>새 생명이 자라가려면</h2>
 <p class="solo">갓 태어난 아기가 먹고 숨 쉬고 가족 안에서 자라듯, 그리스도인도 <b>네 가지</b>로 자라갑니다.</p>
 ${WHEEL('말씀','기도','교제','증거','그리스도','중심','순종하는 그리스도인의 삶')}
-<p style="font-size:.9em">📖 <b>말씀</b> — 요한복음을 하루 한 장씩<br>🙏 <b>기도</b> — 하나님께 무엇이든 말씀드리기<br>🤝 <b>교제</b> — 이 복음을 전해 준 사람, 교회와 함께<br>📣 <b>증거</b> — 받은 선물을 다른 이에게</p>
+<p style="font-size:.9em">📖 <b>말씀</b> — 요한복음을 하루 한 장씩<br>🙏 <b>기도</b> — 하나님께 무엇이든 말씀드리기<br>🤝 <b>교제</b> — 이 복음을 전해 준 사람, 교회와 함께<br>📣 <b>증거</b> — 받은 선물을 다른 이에게<br>⭕ <b>테 · 순종</b> — 삶의 현장에서 말씀대로 사는 것. 바퀴가 땅에 닿는 곳이 테이듯, 믿음은 순종으로 드러납니다. 듣고 행하지 않으면 모래 위에 지은 집과 같습니다 (요 14:21, 롬 12:1, 마 7:24-27).</p>
 ${BDAY('🎂 나의 영적 생일','이름','영적 생일 카드 만들기')}
 ${N('· 수레바퀴: 힘은 중심(그리스도)에서 나옵니다. 세로 살(말씀·기도)은 하나님과, 가로 살(교제·증거)은 사람과의 관계.<br>· 일주일 안에 다시 만날 약속을 정하고, 요한복음을 함께 읽으며 양육을 시작하세요.')}`},
 summary:{t:'한눈에 보기',cap:'하나님의 선물 영생 — 다리 예화',html:`
@@ -723,8 +778,8 @@ next:{t:'Next Steps',cap:'A new life begins on God\'s side',html:`
 <div class="stepNo">11 · NEXT STEPS</div>
 <h2>How new life grows</h2>
 <p class="solo">Just as a newborn baby eats, breathes and grows up in a family, a Christian grows in <b>four ways.</b></p>
-${WHEEL('Word','Prayer','Fellowship','Witness','Christ','the center','The obedient Christian')}
-<p style="font-size:.9em">📖 <b>Word</b> — read one chapter of John each day<br>🙏 <b>Prayer</b> — talk to God about anything<br>🤝 <b>Fellowship</b> — with the one who shared this, and a church<br>📣 <b>Witness</b> — pass the gift on to others</p>
+${WHEEL('Word','Prayer','Fellowship','Witness','Christ','the center','THE OBEDIENT CHRISTIAN')}
+<p style="font-size:.9em">📖 <b>Word</b> — read one chapter of John each day<br>🙏 <b>Prayer</b> — talk to God about anything<br>🤝 <b>Fellowship</b> — with the one who shared this, and a church<br>📣 <b>Witness</b> — pass the gift on to others<br>⭕ <b>Rim · Obedience</b> — living out God’s word in daily life. The rim is where the wheel meets the road; faith shows itself in obedience. Hearing without doing is like a house built on sand (John 14:21; Rom 12:1; Matt 7:24-27).</p>
 ${BDAY('🎂 My spiritual birthday','Name','Make my birthday card')}
 ${N('· The Wheel: power comes from the hub (Christ). The vertical spokes (Word, Prayer) relate to God; the horizontal (Fellowship, Witness) to people.<br>· Arrange to meet within a week and begin follow-up by reading John together.')}`},
 summary:{t:'Summary',cap:'The Gift of God — The Bridge to Life',html:`
@@ -875,7 +930,7 @@ next:{t:'下一步',cap:'在神这一边开始的新生命',html:`
 <h2>新生命如何成长</h2>
 <p class="solo">就像新生的婴儿要吃、要呼吸、在家中长大，基督徒也借着<b>四件事</b>成长。</p>
 ${WHEEL('神的话','祷告','团契','见证','基督','中心','顺服的基督徒生活')}
-<p style="font-size:.9em">📖 <b>神的话</b>——每天读一章《约翰福音》<br>🙏 <b>祷告</b>——什么事都可以告诉神<br>🤝 <b>团契</b>——与向你传福音的人及教会里的弟兄姊妹交流、相伴<br>📣 <b>见证</b>——把领受的礼物分享给别人</p>
+<p style="font-size:.9em">📖 <b>神的话</b>——每天读一章《约翰福音》<br>🙏 <b>祷告</b>——什么事都可以告诉神<br>🤝 <b>团契</b>——与向你传福音的人及教会里的弟兄姊妹交流、相伴<br>📣 <b>见证</b>——把领受的礼物分享给别人<br>⭕ <b>轮圈 · 顺服</b>——在生活中照着神的话去行。轮圈是车轮接触地面的地方，信心借着顺服显明出来。听道而不行，就像把房子盖在沙土上（约14:21；罗12:1；太7:24-27）。</p>
 ${BDAY('🎂 我的属灵生日','名字','制作属灵生日卡')}
 ${N('· 车轮比喻：力量来自中心（基督）。竖的轮辐（神的话、祷告）是与神的关系，横的轮辐（团契、见证）是与人的关系。<br>· 约好在一周内再见面，从一起读《约翰福音》开始，陪伴对方在信仰上成长。')}`},
 summary:{t:'总结',cap:'神的恩赐 永生——生命之桥',html:`
@@ -961,7 +1016,7 @@ function openGift(){ stage.classList.add('giftOpen'); toast(L.giftT); }
 let tried=new Set();
 function tryPlank(btn,label,len){
   const g=$('#planks'); const id='pk'+Date.now();
-  g.insertAdjacentHTML('beforeend',`<g id="${id}" class="plank go"><rect x="150" y="145" width="${len}" height="9" rx="2" fill="#c9b48a" stroke="#8a7550"/><text x="${150+len/2}" y="138" text-anchor="middle" font-size="16" class="lbl" fill="#ffe7a8" stroke="#3a2a10" stroke-width="3" paint-order="stroke">${label}</text></g>`);
+  g.insertAdjacentHTML('beforeend',`<g id="${id}" class="plank go"><rect x="150" y="145" width="${len}" height="9" rx="2" fill="#E9DFC7" stroke="#B9A57A"/><text x="${150+len/2}" y="138" text-anchor="middle" font-size="16" font-weight="800" fill="#1F2756" style="font-family:Pretendard,sans-serif">${label}</text></g>`);
   setTimeout(()=>document.getElementById(id)?.remove(),2500);
   btn.style.textDecoration='line-through'; btn.style.opacity=.6;
   tried.add(label);
@@ -1195,8 +1250,8 @@ function makeCard(){
   const [y,m,dd]=d.split('-').map(Number);
   const c=document.createElement('canvas'); c.width=1080;c.height=1350; const x=c.getContext('2d');
   const g=x.createLinearGradient(0,0,0,1350); g.addColorStop(0,'#14213a'); g.addColorStop(1,'#2c5282'); x.fillStyle=g; x.fillRect(0,0,1080,1350);
-  x.fillStyle='#6f5d49'; x.fillRect(0,820,400,530); x.fillRect(680,820,400,530);
-  x.fillStyle='#6aa84f'; x.fillRect(0,815,400,14); x.fillRect(680,815,400,14);
+  x.fillStyle='#2E3A78'; x.fillRect(0,820,400,530); x.fillRect(680,820,400,530);
+  x.fillStyle='#D4B15A'; x.fillRect(0,816,400,5); x.fillRect(680,816,400,5);
   const gl=x.createRadialGradient(540,780,10,540,780,330); gl.addColorStop(0,'rgba(255,242,184,.85)'); gl.addColorStop(1,'rgba(255,242,184,0)'); x.fillStyle=gl; x.fillRect(150,420,780,720);
   x.fillStyle='#a8682f'; x.fillRect(522,600,36,750); x.fillRect(370,800,340,32);
   x.textAlign='center'; const F='Pretendard, "Apple SD Gothic Neo", "PingFang SC", "Noto Sans SC", sans-serif';
