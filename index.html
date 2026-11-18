@@ -273,6 +273,22 @@ header{gap:4px}
 .crossed #godList text{fill:#F3DE9C;font-weight:700}
 #tFree,#tHear,#tBelieve,#manList,#godList{font-family:Pretendard,"PingFang SC",sans-serif}
 .night #tHear,.night #tBelieve{fill:#F7F2E6}
+
+/* 간결 모드: 첫 화면 이후 위쪽 단추 줄을 숨기고 그림 모서리에 작은 단추 */
+body.compact header{display:none}
+#fab{position:absolute;top:8px;right:8px;display:none;gap:6px;z-index:6}
+body.compact #fab{display:flex}
+#fab button{width:34px;height:34px;border-radius:50%;border:0;background:rgba(26,33,80,.86);color:#F3ECDA;box-shadow:0 1px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;padding:0}
+#fab .ic,#stage #fab svg{position:static;inset:auto;width:18px;height:18px;margin:0}
+#fabBible{display:none!important} .hasBible #fabBible{display:flex!important}
+body.compact #stageCap{left:10px;transform:none;max-width:calc(100% - 100px);white-space:normal;text-align:left;line-height:1.35}
+#app{padding-top:0} body.compact #app{padding-top:env(safe-area-inset-top)}
+#menuBox .mItem{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:#F4F1EA;border-radius:12px;padding:12px;margin:0 0 8px;font-family:inherit;font-size:16px;font-weight:700;color:#1A2150}
+#menuBox .mRow{display:flex;align-items:center;gap:6px;margin:0 0 8px}
+#menuBox .mRow span{width:28px;display:flex;justify-content:center;color:#1A2150}
+#menuBox .mRow button{flex:1;border:1px solid #d9d3c4;background:#fff;border-radius:10px;min-height:42px;font-family:inherit;font-size:14px;font-weight:700;color:#1A2150;padding:0 4px}
+#menuBox .mRow button.on{background:#1A2150;color:#fff;border-color:#1A2150}
+#toc .sheet .ic{stroke:currentColor}
 </style>
 </head>
 <body>
@@ -352,6 +368,7 @@ header{gap:4px}
       </g>
     </svg>
     <div id="stageCap"></div>
+    <div id="fab"><button id="fabBible" onclick="openBible()" title="성경"><svg class="ic" viewBox="0 0 24 24"><path d="M2.5 5.5c3-1.2 6.2-1 9.5 1 3.3-2 6.5-2.2 9.5-1v13c-3-1.2-6.2-1-9.5 1-3.3-2-6.5-2.2-9.5-1z"/><path d="M12 6.5v13"/></svg></button><button id="fabMenu" onclick="toc(true)" title="메뉴"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
   </div>
 
   <div id="panel"></div>
@@ -363,7 +380,7 @@ header{gap:4px}
     <button class="nb" id="next">다음 ▶</button>
   </nav>
 
-  <div id="toc"><div class="sheet"><div id="tocH" style="font-weight:800;color:var(--blue);margin-bottom:6px">목차</div><div id="tocList"></div>
+  <div id="toc"><div class="sheet"><div id="menuBox"></div><div id="tocH" style="font-weight:800;color:var(--blue);margin-bottom:6px">목차</div><div id="tocList"></div>
     <div style="display:flex;align-items:center;gap:8px;margin-top:14px"><span id="fsLbl" style="flex:1;font-weight:700">글자 크기</span><button class="btn small ghost" style="min-width:56px" onclick="fsStep(-1)">가−</button><button class="btn small ghost" style="min-width:56px" onclick="fsStep(1)">가+</button></div>
     <div id="tocHelp" style="font-size:13px;color:#888;margin-top:14px;line-height:1.6"></div></div></div>
   <div id="langPop"><button data-l="ko" onclick="setLang('ko',1)">한국어</button><button data-l="en" onclick="setLang('en',1)">English</button><button data-l="zh" onclick="setLang('zh',1)">中文</button></div>
@@ -401,7 +418,7 @@ ko:{title:'하나님의 선물 · 영생',sub:'다리 예화로 보는 복음',p
  blanks:'모두 <b>과거형</b>입니다. 믿는 순간 영생은 <b>이미</b> 나의 것입니다!',
  giftT:'🎁 영생 — 값없이 주시는 선물',amenT:'✨ 사망에서 생명으로!',
  notesOn:'📝 전하는 이 노트 켜짐',notesOff:'노트 꺼짐 (듣는 분 화면)',
- mT:'👥 함께 보기 — 📝 노트는 전하는 이용',mA:'🙋 혼자 보기 — 🔊 로 읽어 주기',noTTS:'이 기기는 음성 읽기를 지원하지 않습니다',copied:'링크를 복사했습니다',
+ mT:'👥 함께 보기 — 📝 노트는 전하는 이용',mA:'혼자 보기 — 오른쪽 위 메뉴에서 읽어 주기를 켤 수 있습니다',noTTS:'이 기기는 음성 읽기를 지원하지 않습니다',copied:'링크를 복사했습니다',
  cardT:'나의 영적 생일',cardV:['내 말을 듣고 또 나 보내신 이를 믿는 자는','영생을 얻었고 심판에 이르지 아니하나니','사망에서 생명으로 옮겼느니라'],cardR:'요한복음 5:24',me:'나',
  date:(y,m,d)=>`${y}년 ${m}월 ${d}일`,save:'⬇ 이미지 저장',saveHint:'사진을 길게 눌러 저장하거나 공유할 수도 있습니다.',
  shareT:'하나님의 선물 영생',shareX:'다리 예화로 보는 복음',
@@ -418,6 +435,7 @@ ko:{title:'하나님의 선물 · 영생',sub:'다리 예화로 보는 복음',p
  {k:'success',label:'성공',len:66,msg:'세상에서 성공하고 모든 것을 얻어도, 영혼을 잃으면 아무 유익이 없습니다.',vs:[['마가복음 8:36','<b>사람이 만일 온 천하를 얻고도 자기 목숨을 잃으면</b> 무엇이 유익하리요']]}
 ],
  free:'값없이 주시는 선물',hear:'듣고',believe:'믿음',manL:['죄인','심판','사망'],godL:['영생','심판받지 아니함','사망에서 생명으로'],
+ mRead:'읽어 주기',mTogether:'함께 보기',mAlone:'혼자 보기',mNotes:'전하는 이 노트',mBible:'성경 찾아보기',
  tts:'ko-KR',langName:'한국어'},
 en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next ▶',restart:'Restart ↺',toc:'Contents',
  tocHelp:'📝 helper notes on/off · 🔊 read aloud · 👥/🙋 together / on my own<br>Tap the picture to replay the animation. You can also swipe left or right.',
@@ -432,7 +450,7 @@ en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next 
  blanks:'All of these are <b>already true</b>. The moment you believe, eternal life is <b>already</b> yours!',
  giftT:'🎁 Eternal life — a free gift',amenT:'✨ From death to life!',
  notesOn:'📝 Helper notes on',notesOff:'Notes off (listener view)',
- mT:'👥 Together — 📝 notes are for the helper',mA:'🙋 On my own — 🔊 read aloud',noTTS:'Read-aloud is not supported on this device',copied:'Link copied',
+ mT:'👥 Together — 📝 notes are for the helper',mA:'On my own — turn on Read aloud from the menu',noTTS:'Read-aloud is not supported on this device',copied:'Link copied',
  cardT:'My Spiritual Birthday',cardV:['Whoever hears my word and believes him who sent me','has eternal life and will not be judged','but has crossed over from death to life.'],cardR:'John 5:24',me:'Me',
  date:(y,m,d)=>new Date(y,m-1,d).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),save:'⬇ Save image',saveHint:'You can also long-press the picture to save or share it.',
  shareT:'The Gift of God — Eternal Life',shareX:'The Bridge to Life',
@@ -449,6 +467,7 @@ en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next 
  {k:'success',label:'Success',len:72,msg:'Even if we succeed and gain everything in this world, it is worth nothing if we lose our soul.',vs:[['Mark 8:36','<b>What good is it for someone to gain the whole world, yet forfeit their soul?</b>']]}
 ],
  free:'A free gift',hear:'Hear',believe:'Believe',manL:['Sinner','Judgment','Death'],godL:['Eternal life','Not judged','From death to life'],
+ mRead:'Read aloud',mTogether:'Together',mAlone:'On my own',mNotes:'Helper notes',mBible:'Open the Bible',
  tts:'en-US',langName:'English'},
 zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:'下一步 ▶',restart:'重新开始 ↺',toc:'目录',
  tocHelp:'📝 传讲者笔记 · 🔊 朗读 · 👥/🙋 一起看 / 自己看<br>点图画可以重新播放动画，也可以左右滑动翻页。',
@@ -463,7 +482,7 @@ zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:
  blanks:'这些都是<b>已经成就</b>的事。信的那一刻，永生<b>已经</b>是你的了！',
  giftT:'🎁 永生——白白的恩赐',amenT:'✨ 出死入生！',
  notesOn:'📝 传讲者笔记已打开',notesOff:'笔记已关闭（听者画面）',
- mT:'👥 一起看——📝 笔记给传讲者看',mA:'🙋 自己看——🔊 可以朗读',noTTS:'此设备不支持朗读',copied:'链接已复制',
+ mT:'👥 一起看——📝 笔记给传讲者看',mA:'自己看——可在菜单中开启朗读',noTTS:'此设备不支持朗读',copied:'链接已复制',
  cardT:'我的属灵生日',cardV:['那听我话、又信差我来者的，','就有永生，不至于定罪，','是已经出死入生了。'],cardR:'约翰福音 5:24',me:'我',
  date:(y,m,d)=>`${y}年${m}月${d}日`,save:'⬇ 保存图片',saveHint:'也可以长按图片保存或分享。',
  shareT:'神的恩赐 永生',shareX:'生命之桥',
@@ -480,6 +499,7 @@ zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:
  {k:'success',label:'成功',len:56,msg:'即使在世上成功、赚得一切，若赔上自己的灵魂，又有什么益处呢？',vs:[['马可福音 8:36','<b>人就是赚得全世界，赔上自己的生命，有什么益处呢？</b>']]}
 ],
  free:'白白的恩赐',hear:'听',believe:'信',manL:['罪人','审判','死亡'],godL:['永生','不至于定罪','出死入生'],
+ mRead:'朗读',mTogether:'一起看',mAlone:'自己看',mNotes:'传讲者笔记',mBible:'查看圣经',
  tts:'zh-CN',langName:'中文'}
 };
 
@@ -1025,6 +1045,7 @@ function go(i,dir){
   if(!shouldCross&&prevCrossed) walkTo(85,500);
   if(s.enter) s.enter(dir);
   if(s.id==='pray'&&prayed){$('#amenBtn').disabled=true;$('#amenBox').innerHTML=`<div class="card">${L.welcome}</div>`}
+  document.body.classList.toggle('compact',i>0);
   st.cur=i; save();
   if(speaking){ if(s.id==='start') go(1,1); else readStep({sin:1900,cross:1700,risen:1500}[s.id]||700); }
 }
@@ -1060,10 +1081,10 @@ function tryPlank(btn,i){
   const m=$('#effortMsg');
   const blk=document.createElement('div'); blk.className='effBlk fade';
   blk.innerHTML=`<div class="effHead">${e.label}<span class="sr">. </span></div><p>${e.msg}</p>${e.vs.map(v=>V(v[0],v[1],'red')).join('')}`;
-  m.appendChild(blk);
+  m.innerHTML=''; m.appendChild(blk);
   const out=[blk];
   if(panel.querySelectorAll('.effBtns .tried').length===L.eff.length){ const f=document.createElement('div'); f.className='fade'; f.innerHTML=L.eff3(); m.appendChild(f); out.push(f); }
-  if(!speaking) setTimeout(()=>blk.scrollIntoView({behavior:'smooth',block:'start'}),60);
+  if(!speaking) setTimeout(()=>{ const bt=panel.querySelector('.effBtns'); if(bt) panel.scrollBy({top:bt.getBoundingClientRect().top-panel.getBoundingClientRect().top-10,behavior:'smooth'}); },60);
   return out;
 }
 
@@ -1320,7 +1341,18 @@ function share(){
   else { navigator.clipboard?.writeText(u); toast(L.copied); }
 }
 function toast(t){const e=$('#toast');e.textContent=stripEmo(t);e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
-function toc(o){$('#toc').classList.toggle('open',o)}
+function toc(o){ if(o) renderMenu(); $('#toc').classList.toggle('open',o); }
+function renderMenu(){
+  const t=st.mode==='together';
+  $('#menuBox').innerHTML=`
+  <button class="mItem" onclick="toc(false);speak()">🔊 ${speaking?L.rdStop:L.mRead}</button>
+  <div class="mRow"><span>🌐</span><button class="${st.lang==='ko'?'on':''}" onclick="setLang('ko',1);renderMenu()">한국어</button><button class="${st.lang==='en'?'on':''}" onclick="setLang('en',1);renderMenu()">English</button><button class="${st.lang==='zh'?'on':''}" onclick="setLang('zh',1);renderMenu()">中文</button></div>
+  <div class="mRow"><span>👥</span><button class="${t?'on':''}" onclick="setMode('together');renderMenu()">${L.mTogether}</button><button class="${!t?'on':''}" onclick="setMode('alone');renderMenu()">${L.mAlone}</button></div>
+  <button class="mItem" onclick="$('#noteBtn').click();renderMenu()">📝 ${L.mNotes}: ${st.notes?'ON':'OFF'}</button>
+  ${hasBible?`<button class="mItem" onclick="toc(false);openBible()">📖 ${L.mBible}</button>`:''}
+  <div style="height:8px"></div>`;
+  iconizeDom($('#menuBox'));
+}
 $('#tocBtn').onclick=()=>toc(true);
 $('#toc').onclick=e=>{if(e.target.id==='toc')toc(false)};
 $('#noteBtn').onclick=()=>{const on=document.body.classList.toggle('showNotes');st.notes=on;save();$('#noteBtn').classList.toggle('on',on);toast(on?L.notesOn:L.notesOff)};
