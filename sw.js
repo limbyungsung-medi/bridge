@@ -1,11 +1,23 @@
-// 영생의 다리 — 오프라인 보관용 (v2: 항상 최신 화면 먼저)
-const C='bridge-v2';
-const FILES=['./','./index.html','https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES.map(u=>new Request(u,{cache:'reload'})))).catch(()=>{}));self.skipWaiting()});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET')return;
-  const same=new URL(e.request.url).origin===location.origin;
-  e.respondWith((same?fetch(e.request.url,{cache:'no-cache'}):fetch(e.request)).then(r=>{const cp=r.clone();caches.open(C).then(c=>c.put(e.request,cp)).catch(()=>{});return r})
-    .catch(()=>caches.match(e.request,{ignoreSearch:true}).then(r=>r||caches.match('./index.html'))));
+// 말씀나눔 찬송가 — 앱 설치와 오프라인 사용을 위한 서비스워커
+// 화면(index.html)은 항상 인터넷에서 새로 받고, 안 될 때만 저장본을 씁니다.
+const CACHE = 'hymn-app-v1';
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== location.origin) return; // 피아노 소리 등 외부 파일은 앱이 따로 저장함
+  e.respondWith((async () => {
+    try {
+      const res = await fetch(req, { cache: 'no-store' });
+      if (res && res.ok) { const c = await caches.open(CACHE); c.put(req, res.clone()); }
+      return res;
+    } catch (err) {
+      const hit = await caches.match(req, { ignoreSearch: true });
+      if (hit) return hit;
+      if (req.mode === 'navigate') { const idx = await caches.match('./') || await caches.match('index.html'); if (idx) return idx; }
+      throw err;
+    }
+  })());
 });
