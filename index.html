@@ -34,14 +34,14 @@ header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
 
 /* stage */
 #stage{position:relative;flex:0 0 auto;height:min(37vh,270px);overflow:hidden}
-.sky{position:absolute;inset:0;transition:opacity 1.4s ease}
+.sky{position:absolute;inset:0;transition:opacity 2.4s ease}
 #skyDay{background:linear-gradient(#FBF7EE,#F3EBD9)}
 #skyNight{background:linear-gradient(#0b1020,#2a2f4a 75%);opacity:0}
 #skyDawn{background:linear-gradient(#FBF4E1,#F4E6C4);opacity:0}
 .night #skyNight{opacity:1}
 .dawn #skyDawn{opacity:1}
 #stage svg{position:absolute;inset:0;width:100%;height:100%}
-.tr{transition:transform 1.6s cubic-bezier(.6,0,.3,1),opacity 1.2s}
+.tr{transition:transform 2.4s cubic-bezier(.45,0,.3,1),opacity 1.8s}
 #L{transform:translateX(0)} #R{transform:translateX(0)}
 .joined #L{transform:translateX(50px)} .joined #R{transform:translateX(-50px)}
 #filler{opacity:0} .joined #filler{opacity:1}
@@ -57,17 +57,6 @@ header .ttl small{display:block;font-weight:400;font-size:11.5px;opacity:.7}
 .cross #sinTxt{opacity:.45}
 #crossGlow{opacity:0;transition:opacity 1.2s 1s}
 .cross #crossGlow{opacity:1}
-#giftG{opacity:0;transform:scale(.3);transform-origin:365px 140px;transition:all .8s cubic-bezier(.3,1.5,.5,1)}
-.gift #giftG{opacity:1;transform:scale(1)}
-#lid{transition:transform .7s cubic-bezier(.3,1.6,.5,1)}
-.giftOpen #lid{transform:translate(14px,-26px) rotate(28deg)}
-#lifeTxt{opacity:0;transform:translateY(8px);transition:all .8s .3s}
-.giftOpen #lifeTxt{opacity:1;transform:translateY(-6px)}
-#box{transform-origin:365px 138px;transition:opacity .7s 1.1s,transform .7s 1.1s}
-.giftOpen #box{opacity:0;transform:scale(.4)}
-.giftOpen #lifeTxt{animation:shine 2.4s 1.2s ease-in-out infinite}
-@keyframes shine{50%{fill:#d4a017}}
-.crossed #lifeTxt{transform:translate(-57px,-26px);transition:transform 1.2s}
 #halo{opacity:0;transition:opacity 1s}
 #riseG{opacity:0;transform:scale(.2);transform-origin:200px 118px;transition:transform 1.8s cubic-bezier(.2,1.2,.4,1),opacity 1.2s}
 .risen #riseG{opacity:1;transform:scale(1)}
@@ -240,7 +229,7 @@ body[data-lang=ko] .langRow button:first-child,body[data-lang=en] .langRow butto
 .train2{border-bottom-color:#8A90B8} .train2::after{background:repeating-linear-gradient(90deg,#8A90B8 0 6px,transparent 6px 16px)}
 #stageCap{background:rgba(26,33,80,.82)}
 .night #P circle:not(#halo),.night #P path{fill:#F7F2E6;stroke:#F7F2E6}
-#tRisen,#lifeTxt{fill:#8A6200}
+#tRisen{fill:#8A6200}
 #tMan,#tGod{fill:#F7F2E6}
 #halo{opacity:0!important}
 
@@ -258,10 +247,32 @@ body[data-lang=en] h2,body[data-lang=en] .verse .tx,body[data-lang=en] .prayer,b
 h2{font-weight:700;letter-spacing:-.01em;line-height:1.4}
 .verse .tx{font-weight:500;line-height:1.85}
 .stepNo{letter-spacing:.12em;font-size:12px}
-#lifeTxt,#tRisen{font-family:"Noto Serif KR","Noto Serif SC",serif}
+#tRisen{font-family:"Noto Serif KR","Noto Serif SC",serif}
 
 .hb{min-width:36px;height:36px;padding:0 6px}
 header{gap:4px}
+
+.effBtns .btn{flex:1 1 30%;min-height:46px}
+.effBtns .btn.tried{opacity:.55;text-decoration:line-through}
+.effBlk{margin:14px 0 6px;padding:2px 0 0;border-top:1px solid rgba(255,255,255,.1)}
+.effBlk .effHead{font-weight:800;color:#E9A3A3;font-size:1.05em;margin-top:10px}
+.effBlk .effHead::after{content:"  ✕";font-size:.85em;opacity:.8}
+.sr{font-size:0}
+.effBlk p{margin:.3em 0 .4em}
+
+/* 사람 편 · 하나님 편 목록 (요 5:24) */
+#manList text,#godList text,#tFree,#tHear,#tBelieve{opacity:0;transition:opacity .9s}
+.deep #manList text{opacity:1}
+.deep #manList #m2{transition-delay:.5s} .deep #manList #m3{transition-delay:1s}
+.gift #godList text{opacity:1}
+.gift #godList #g1{transition-delay:.4s} .gift #godList #g2{transition-delay:1.2s} .gift #godList #g3{transition-delay:2s}
+.gift #tFree{opacity:1;transition-delay:2.6s}
+.faith #tHear,.faith #tBelieve{opacity:1}
+.crossed #manList text{opacity:.35}
+.crossed #tFree{opacity:0;transition-delay:0s}
+.crossed #godList text{fill:#F3DE9C;font-weight:700}
+#tFree,#tHear,#tBelieve,#manList,#godList{font-family:Pretendard,"PingFang SC",sans-serif}
+.night #tHear,.night #tBelieve{fill:#F7F2E6}
 </style>
 </head>
 <body>
@@ -296,19 +307,17 @@ header{gap:4px}
       <g id="L" class="tr">
         <path d="M-60 150 L150 150 L141 172 L151 196 L136 240 L-60 240 Z" fill="url(#earthL)"/>
         <path d="M-60 150 L150 150" stroke="#D4B15A" stroke-width="2"/>
-        <text id="tMan" class="lbl" x="70" y="192" text-anchor="middle" font-size="21" fill="#fff">사람</text>
+        <text id="tMan" class="lbl" x="75" y="174" text-anchor="middle" font-size="19" fill="#fff">사람</text>
+        <g id="manList" font-size="12.5" text-anchor="middle" fill="#F2D9D9"><text id="m1" x="75" y="196"></text><text id="m2" x="75" y="214"></text><text id="m3" x="75" y="232"></text></g>
       </g>
       <g id="R" class="tr">
         <path d="M250 150 L460 150 L460 240 L264 240 L250 212 L262 182 Z" fill="url(#earthL)"/>
         <path d="M250 150 L460 150" stroke="#D4B15A" stroke-width="2"/>
-        <text id="tGod" class="lbl" x="330" y="192" text-anchor="middle" font-size="21" fill="#fff">하나님</text>
+        <text id="tGod" class="lbl" x="322" y="174" text-anchor="middle" font-size="19" fill="#fff">하나님</text>
+        <g id="godList" font-size="12.5" text-anchor="middle" fill="#E9CF85"><text id="g1" x="322" y="196"></text><text id="g2" x="322" y="214"></text><text id="g3" x="322" y="232"></text></g>
       </g>
       <rect id="filler" class="tr" x="170" y="150" width="60" height="91" fill="url(#earthL)"/>
       <rect id="fillerG" x="170" y="149" width="60" height="2" fill="#D4B15A" style="opacity:var(--fg,1);transition:opacity 1s"/>
-
-      <g id="deepTxt"><text id="tDeath" class="lbl" x="180" y="232" text-anchor="end" font-size="17" fill="#D98C8C">사망</text><text id="tJudg" class="lbl" x="220" y="232" text-anchor="start" font-size="17" fill="#D98C8C">심판</text></g>
-      <!-- crack bolt -->
-      <path id="bolt" d="M200 60 L188 100 L206 108 L192 150 L210 160 L196 238" stroke="#E06060" stroke-width="4" fill="none"/>
 
       <g id="riseG">
         <g stroke="#C9A227" stroke-width="2.5" stroke-linecap="round" opacity=".75" transform="translate(0 26)">
@@ -328,16 +337,10 @@ header{gap:4px}
       <path id="bond" d="M95 108 Q210 20 320 140" stroke="#C9A227" stroke-width="2.5" fill="none" stroke-dasharray="5 5"/>
       <path id="bond2" d="M305 120 Q315 100 312 98" stroke="#C9A227" stroke-width="0" fill="none"/>
 
-      <!-- gift -->
-      <g id="giftG">
-        <text id="lifeTxt" class="lbl" x="352" y="110" text-anchor="middle" font-size="19" fill="#9a6a00">영생</text>
-        <g id="box">
-        <rect x="352" y="128" width="26" height="20" fill="#1F2756" rx="2"/>
-        <rect x="363" y="128" width="4" height="20" fill="#D4B15A"/>
-        <g id="lid"><rect x="349" y="121" width="32" height="8" fill="#2E3A78" rx="2"/><rect x="363" y="121" width="4" height="8" fill="#D4B15A"/>
-          <path d="M365 121 q-8 -9 -12 -2 q4 4 12 2 q8 -9 12 -2 q-4 4 -12 2" fill="#D4B15A"/></g>
-        </g>
-      </g>
+      <!-- 값없이 주시는 선물 + 듣고/믿음 -->
+      <text id="tFree" x="322" y="138" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8A6200">값없이 주시는 선물</text>
+      <text id="tHear" x="156" y="129" text-anchor="middle" font-size="13" font-weight="800" fill="#1F2756">듣고</text>
+      <text id="tBelieve" x="244" y="129" text-anchor="middle" font-size="13" font-weight="800" fill="#1F2756">믿음</text>
 
       <!-- person -->
       <g id="P" transform="translate(85 0)">
@@ -389,7 +392,7 @@ ko:{title:'하나님의 선물 · 영생',sub:'다리 예화로 보는 복음',p
  tocHelp:'📝 전하는 이 노트 켜기/끄기 · 🔊 읽어 주기 · 👥/🙋 함께 보기/혼자 보기<br>그림을 누르면 움직임이 다시 재생됩니다. 좌우로 밀어서 넘길 수도 있습니다.',
  fs:'글자 크기',man:'사람',god:'하나님',sin:'죄',death:'사망',judg:'심판',jesus:'예수 그리스도',risen:'부활하신 예수님',life:'영생',
  eff1:l=>`${l}(으)로는 저편에 닿지 못합니다. 다른 것도 눌러 보세요.`,
- eff3:()=>`<div class="bubble fade"><b>어떤 노력도 하나님께 닿지 못합니다.</b> 이 구렁텅이는 사람 편에서는 건널 수 없습니다.</div>${V('잠언 14:12','어떤 길은 사람이 보기에 바르나 <b>필경은 사망의 길</b>이니라','red')}${V('에베소서 2:9','<b>행위에서 난 것이 아니니</b> 이는 누구든지 자랑하지 못하게 함이라','red')}`,
+ eff3:()=>`<div class="bubble fade"><b>어떤 노력도 하나님께 닿지 못합니다.</b> 이 구렁텅이는 사람 편에서는 건널 수 없습니다.</div>`,
  welcome:`<div class="big">하나님 가족이 되신 것을<br>환영합니다!</div><p style="margin:8px 0 0">"영접하는 자 곧 그 이름을 믿는 자들에게는 하나님의 자녀가 되는 권세를 주셨으니" (요 1:12)</p>`,
  faith:`<b>믿음은 세 가지가 함께 있습니다.</b><br>① <b>알기</b> — 예수님이 누구시고 무엇을 하셨는지 압니다.<br>② <b>동의하기</b> — 그것이 나를 위한 사실임을 인정합니다.<br>③ <b>맡기기</b> — 내 삶을 예수님께 맡기고 따라갑니다.<br><br>세 번째가 바로 <b>영접</b>입니다. 문 밖에서 두드리시는 분께 문을 여는 것과 같습니다.`,
  wantPray:'🙏 기도하고 싶어요',haveQ:'❓ 질문이 있어요',
@@ -406,12 +409,21 @@ ko:{title:'하나님의 선물 · 영생',sub:'다리 예화로 보는 복음',p
  tHelp:'전하는 분이 자신의 간증을 넣을 수 있습니다. 다른 곳에 써 둔 글을 복사해 와서 붙여넣기 하세요. 빈 줄은 문단 나눔이 됩니다. (이 휴대폰에만 저장됩니다)',
  tPasteFail:'붙여넣기를 할 수 없어요. 글상자를 길게 눌러 붙여넣기 하세요.',tResetQ:'기본 간증으로 되돌렸습니다',
  rdFollow:'따라가기',rdType:'타자',rdStop:'멈춤',rdWait:'🔊 선택을 기다립니다 — 다음 ▶을 누르면 이어서 읽습니다',
+ eff:[
+ {k:'good',label:'선행',len:80,msg:'착한 일은 귀하지만, 죄의 값을 대신 갚을 수는 없습니다. 구원은 행위가 아니라 하나님의 은혜와 긍휼로 받습니다.',vs:[['에베소서 2:8-9','너희는 그 은혜에 의하여 믿음으로 말미암아 구원을 받았으니 이것은 너희에게서 난 것이 아니요 하나님의 선물이라 <b>행위에서 난 것이 아니니</b> 이는 누구든지 자랑하지 못하게 함이라'],['디도서 3:5','우리를 구원하시되 <b>우리가 행한 바 의로운 행위로 말미암지 아니하고</b> 오직 그의 긍휼하심을 따라 중생의 씻음과 성령의 새롭게 하심으로 하셨나니']]},
+ {k:'religion',label:'종교',len:68,msg:'종교 의식과 열심으로는 하나님께 닿지 못합니다. 사람이 보기에 바른 길이라도, 구원은 오직 예수님의 이름으로만 받습니다.',vs:[['사도행전 4:12','다른 이로써는 구원을 받을 수 없나니 <b>천하 사람 중에 구원을 받을 만한 다른 이름을 우리에게 주신 일이 없음이라</b> 하였더라'],['잠언 14:12','어떤 길은 사람이 보기에 바르나 <b>필경은 사망의 길</b>이니라']]},
+ {k:'moral',label:'도덕',len:74,msg:'양심과 도덕, 율법을 지키려는 노력은 오히려 나의 죄를 깨닫게 할 뿐, 나를 의롭게 하지 못합니다.',vs:[['로마서 3:20','그러므로 <b>율법의 행위로 그의 앞에 의롭다 하심을 얻을 육체가 없나니</b> 율법으로는 죄를 깨달음이니라']]},
+ {k:'philo',label:'철학',len:62,msg:'사람의 지혜와 사상으로는 하나님께 이르지 못합니다. 그리스도를 따르지 않는 지식은 헛된 속임수가 될 수 있습니다.',vs:[['골로새서 2:8','누가 <b>철학과 헛된 속임수로</b> 너희를 사로잡을까 주의하라 이것은 사람의 전통과 세상의 초등학문을 따름이요 그리스도를 따름이 아니니라']]},
+ {k:'money',label:'돈',len:56,msg:'돈으로는 영혼을 살 수 없습니다. 우리는 은이나 금이 아니라 그리스도의 보배로운 피로 값 주고 사신 바 되었습니다.',vs:[['베드로전서 1:18-19','너희가 알거니와 너희 조상이 물려 준 헛된 행실에서 대속함을 받은 것은 <b>은이나 금 같이 없어질 것으로 된 것이 아니요</b> 오직 흠 없고 점 없는 어린 양 같은 그리스도의 보배로운 피로 된 것이니라']]},
+ {k:'success',label:'성공',len:66,msg:'세상에서 성공하고 모든 것을 얻어도, 영혼을 잃으면 아무 유익이 없습니다.',vs:[['마가복음 8:36','<b>사람이 만일 온 천하를 얻고도 자기 목숨을 잃으면</b> 무엇이 유익하리요']]}
+],
+ free:'값없이 주시는 선물',hear:'듣고',believe:'믿음',manL:['죄인','심판','사망'],godL:['영생','심판받지 아니함','사망에서 생명으로'],
  tts:'ko-KR',langName:'한국어'},
 en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next ▶',restart:'Restart ↺',toc:'Contents',
  tocHelp:'📝 helper notes on/off · 🔊 read aloud · 👥/🙋 together / on my own<br>Tap the picture to replay the animation. You can also swipe left or right.',
  fs:'Text size',man:'People',god:'God',sin:'SIN',death:'Death',judg:'Judgment',jesus:'Jesus Christ',risen:'Risen Jesus',life:'Eternal Life',
  eff1:l=>`"${l}" cannot reach the other side. Try another one.`,
- eff3:()=>`<div class="bubble fade"><b>No human effort can reach God.</b> This chasm cannot be crossed from our side.</div>${V('Proverbs 14:12','There is a way that appears to be right, but <b>in the end it leads to death.</b>','red')}${V('Ephesians 2:9','<b>not by works,</b> so that no one can boast.','red')}`,
+ eff3:()=>`<div class="bubble fade"><b>No human effort can reach God.</b> This chasm cannot be crossed from our side.</div>`,
  welcome:`<div class="big">Welcome to<br>God's family!</div><p style="margin:8px 0 0">"Yet to all who did receive him, to those who believed in his name, he gave the right to become children of God." (John 1:12)</p>`,
  faith:`<b>Faith has three parts.</b><br>① <b>Knowing</b> — who Jesus is and what he has done.<br>② <b>Agreeing</b> — that it is true, and true for me.<br>③ <b>Trusting</b> — handing my life over to Jesus and following him.<br><br>The third is what it means to <b>receive</b> him — like opening the door to the one who is knocking.`,
  wantPray:'🙏 I want to pray',haveQ:'❓ I have questions',
@@ -428,12 +440,21 @@ en:{title:'The Gift of God',sub:'The Bridge to Life',prev:'◀ Back',next:'Next 
  tHelp:'The person sharing can put in their own testimony. Copy it from elsewhere and paste it here. A blank line starts a new paragraph. (Saved only on this phone)',
  tPasteFail:'Cannot paste automatically. Long-press the text box and paste.',tResetQ:'Back to the default story',
  rdFollow:'Follow',rdType:'Typing',rdStop:'Stop',rdWait:'🔊 Waiting — tap Next ▶ to keep listening',
+ eff:[
+ {k:'good',label:'Good works',len:92,msg:'Good deeds are valuable, but they cannot pay the price of sin. Salvation comes by God\u2019s grace and mercy, not by our works.',vs:[['Ephesians 2:8-9','For it is by grace you have been saved, through faith — and this is not from yourselves, it is the gift of God — <b>not by works,</b> so that no one can boast.'],['Titus 3:5','he saved us, <b>not because of righteous things we had done,</b> but because of his mercy. He saved us through the washing of rebirth and renewal by the Holy Spirit']]},
+ {k:'religion',label:'Religion',len:76,msg:'Religious rituals and zeal cannot reach God. Even a way that seems right to us is not enough — salvation is found only in the name of Jesus.',vs:[['Acts 4:12','Salvation is found in no one else, for <b>there is no other name under heaven given to mankind by which we must be saved.</b>'],['Proverbs 14:12','There is a way that appears to be right, but <b>in the end it leads to death.</b>']]},
+ {k:'moral',label:'Morality',len:80,msg:'Trying to keep the law and live morally only shows us our sin; it cannot make us righteous.',vs:[['Romans 3:20','Therefore <b>no one will be declared righteous in God\u2019s sight by the works of the law;</b> rather, through the law we become conscious of our sin.']]},
+ {k:'philo',label:'Philosophy',len:88,msg:'Human wisdom and ideas cannot bring us to God. Knowledge that does not follow Christ can become empty deception.',vs:[['Colossians 2:8','See to it that no one takes you captive through <b>hollow and deceptive philosophy,</b> which depends on human tradition and the elemental spiritual forces of this world rather than on Christ.']]},
+ {k:'money',label:'Money',len:62,msg:'Money cannot buy a soul. We were redeemed not with silver or gold, but with the precious blood of Christ.',vs:[['1 Peter 1:18-19','For you know that it was <b>not with perishable things such as silver or gold</b> that you were redeemed from the empty way of life handed down to you from your ancestors, but with the precious blood of Christ, a lamb without blemish or defect.']]},
+ {k:'success',label:'Success',len:72,msg:'Even if we succeed and gain everything in this world, it is worth nothing if we lose our soul.',vs:[['Mark 8:36','<b>What good is it for someone to gain the whole world, yet forfeit their soul?</b>']]}
+],
+ free:'A free gift',hear:'Hear',believe:'Believe',manL:['Sinner','Judgment','Death'],godL:['Eternal life','Not judged','From death to life'],
  tts:'en-US',langName:'English'},
 zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:'下一步 ▶',restart:'重新开始 ↺',toc:'目录',
  tocHelp:'📝 传讲者笔记 · 🔊 朗读 · 👥/🙋 一起看 / 自己看<br>点图画可以重新播放动画，也可以左右滑动翻页。',
  fs:'字体大小',man:'人',god:'神',sin:'罪',death:'死亡',judg:'审判',jesus:'耶稣基督',risen:'复活的耶稣',life:'永生',
  eff1:l=>`靠"${l}"到不了对岸。再试试别的。`,
- eff3:()=>`<div class="bubble fade"><b>人靠自己的努力，无法来到神面前。</b>这道深渊从人这一边是无法跨越的。</div>${V('箴言 14:12','有一条路，人以为正，<b>至终成为死亡之路。</b>','red')}${V('以弗所书 2:9','<b>也不是出于行为，</b>免得有人自夸。','red')}`,
+ eff3:()=>`<div class="bubble fade"><b>人靠自己的努力，无法来到神面前。</b>这道深渊从人这一边是无法跨越的。</div>`,
  welcome:`<div class="big">欢迎你<br>成为神家里的人！</div><p style="margin:8px 0 0">"凡接待他的，就是信他名的人，他就赐他们权柄作神的儿女。"（约翰福音 1:12）</p>`,
  faith:`<b>信心包含三个部分。</b><br>① <b>知道</b>——知道耶稣是谁、为我们做了什么。<br>② <b>认同</b>——承认这是真的，而且是为我。<br>③ <b>交托</b>——把我的生命交给耶稣，跟随他。<br><br>第三点就是<b>接待</b>耶稣，就像为站在门外叩门的那一位开门。`,
  wantPray:'🙏 我想祷告',haveQ:'❓ 我还有问题',
@@ -450,6 +471,15 @@ zh:{title:'神的恩赐 · 永生',sub:'生命之桥',prev:'◀ 上一步',next:
  tHelp:'传讲者可以放入自己的见证。把在别处写好的文字复制后粘贴到这里。空一行就是分段。（只保存在这部手机上）',
  tPasteFail:'无法自动粘贴，请长按文字框粘贴。',tResetQ:'已恢复默认见证',
  rdFollow:'跟读',rdType:'打字',rdStop:'停止',rdWait:'🔊 等待中——点“下一步 ▶”继续朗读',
+ eff:[
+ {k:'good',label:'善行',len:66,msg:'行善是宝贵的，却不能偿还罪的代价。救恩不是靠行为，而是本乎神的恩典和怜悯。',vs:[['以弗所书 2:8-9','你们得救是本乎恩，也因着信；这并不是出于自己，乃是神所赐的；<b>也不是出于行为，</b>免得有人自夸。'],['提多书 3:5','他便救了我们，<b>并不是因我们自己所行的义，</b>乃是照他的怜悯，借着重生的洗和圣灵的更新。']]},
+ {k:'religion',label:'宗教',len:62,msg:'宗教仪式和热心无法使人来到神面前。人以为正的路也不够——救恩唯独在耶稣的名里。',vs:[['使徒行传 4:12','除他以外，别无拯救；<b>因为在天下人间，没有赐下别的名，我们可以靠着得救。</b>'],['箴言 14:12','有一条路，人以为正，<b>至终成为死亡之路。</b>']]},
+ {k:'moral',label:'道德',len:66,msg:'努力遵守道德和律法，只会让我们看见自己的罪，却不能使我们称义。',vs:[['罗马书 3:20','所以<b>凡有血气的，没有一个因行律法能在神面前称义，</b>因为律法本是叫人知罪。']]},
+ {k:'philo',label:'哲学',len:58,msg:'人的智慧和思想无法使人到达神那里。不照着基督的学问，可能成为虚空的妄言。',vs:[['歌罗西书 2:8','你们要谨慎，恐怕有人用他的<b>理学和虚空的妄言，</b>不照着基督，乃照人间的遗传和世上的小学，就把你们掳去。']]},
+ {k:'money',label:'金钱',len:58,msg:'金钱买不到灵魂。我们得赎，不是凭着金银，乃是凭着基督的宝血。',vs:[['彼得前书 1:18-19','知道你们得赎，脱去你们祖宗所传流虚妄的行为，<b>不是凭着能坏的金银等物，</b>乃是凭着基督的宝血，如同无瑕疵、无玷污的羔羊之血。']]},
+ {k:'success',label:'成功',len:56,msg:'即使在世上成功、赚得一切，若赔上自己的灵魂，又有什么益处呢？',vs:[['马可福音 8:36','<b>人就是赚得全世界，赔上自己的生命，有什么益处呢？</b>']]}
+],
+ free:'白白的恩赐',hear:'听',believe:'信',manL:['罪人','审判','死亡'],godL:['永生','不至于定罪','出死入生'],
  tts:'zh-CN',langName:'中文'}
 };
 
@@ -488,11 +518,11 @@ const META=[
 {id:'risen',stage:'split deep cross dawn risen'},
 {id:'gift',stage:'split deep cross dawn gift'},
 {id:'story',stage:'split deep cross dawn gift giftOpen',enter:renderTesti},
-{id:'respond',stage:'split deep cross dawn gift giftOpen'},
-{id:'pray',stage:'split deep cross dawn gift giftOpen',enter:()=>{if(prayed)setCrossed(true,false)}},
-{id:'assure',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,!prayed)},
-{id:'next',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,false)},
-{id:'summary',stage:'split deep cross dawn gift giftOpen risen crossed',enter:()=>setCrossed(true,false)},
+{id:'respond',stage:'split deep cross dawn gift giftOpen faith'},
+{id:'pray',stage:'split deep cross dawn gift giftOpen faith',enter:()=>{if(prayed)setCrossed(true,false)}},
+{id:'assure',stage:'split deep cross dawn gift giftOpen faith risen crossed',enter:()=>setCrossed(true,!prayed)},
+{id:'next',stage:'split deep cross dawn gift giftOpen faith risen crossed',enter:()=>setCrossed(true,false)},
+{id:'summary',stage:'split deep cross dawn gift giftOpen faith risen crossed',enter:()=>setCrossed(true,false)},
 {id:'faq',stage:'split deep cross dawn gift giftOpen risen',enter:()=>{$('#faqAll').innerHTML=steps.filter(s=>s.id!=='faq').map(s=>(s.html.match(/<details class="faq">[\s\S]*?<\/details>/g)||[]).join('')).join('')}}
 ];
 
@@ -563,13 +593,7 @@ effort:{t:'우리의 한계',cap:'어떤 노력도 하나님께 닿지 못합니
 <div class="stepNo">4 · 우리의 한계</div>
 <h2>우리의 노력으로는<br>건널 수 없습니다</h2>
 <p>사람들은 이 구렁텅이를 건너려고 여러 가지 다리를 놓습니다. 단추를 눌러 <b>직접 건너가 보세요.</b></p>
-<div class="btns">
- <button class="btn ghost" onclick="tryPlank(this,'선행',78)">🤲 선행</button>
- <button class="btn ghost" onclick="tryPlank(this,'종교',66)">🙏 종교</button>
- <button class="btn ghost" onclick="tryPlank(this,'도덕',72)">⚖️ 도덕</button>
- <button class="btn ghost" onclick="tryPlank(this,'철학',60)">📚 철학</button>
- <button class="btn ghost" onclick="tryPlank(this,'성공',54)">💰 성공</button>
-</div>
+<div class="btns effBtns">${UI[st.lang].eff.map((e,i)=>`<button class="btn ghost" onclick="tryPlank(this,${i})">${e.label}</button>`).join('')}</div>
 <div id="effortMsg"></div>
 ${Q('그러면 선하게 사는 일은 의미가 없다는 뜻인가요?','아닙니다. 선하게 사는 것은 귀하고 하나님도 기뻐하십니다. 다만 선행으로 <b>구원을 사는 것은 아니라는</b> 뜻입니다. 순서가 반대입니다. 선행으로 하나님께 가는 것이 아니라, 하나님의 은혜로 구원받은 사람이 감사함으로 선을 행하며 살게 됩니다(엡 2:10).')}
 ${N('· 듣는 분이 직접 눌러 보게 하세요. 떨어질 때마다 "이것으로는 될까요?"<br>· 질문: "○○님은 무엇으로 이 간격을 건너려고 하셨나요?"<br>· 선행이 나쁘다는 인상을 주지 않도록 위 질문을 꼭 함께 다루세요.')}`},
@@ -594,8 +618,8 @@ ${N('· 다리는 무너지지 않았습니다 — 부활이 다리를 영원히
 gift:{t:'하나님의 선물',cap:'영생은 값없이 주시는 하나님의 선물',html:`
 <div class="stepNo">7 · 하나님의 선물</div>
 <h2>구원은 보상이 아니라<br>선물입니다</h2>
-<p class="solo">선물은 일해서 버는 것이 아니라 <b>값없이 받는 것</b>입니다. 그림의 선물 상자를 열어 보세요.</p>
-<div class="btns"><button class="btn gold" onclick="openGift()">🎁 선물 열기</button></div>
+<p class="solo">선물은 일해서 버는 것이 아니라 <b>값없이 받는 것</b>입니다. 그림의 하나님 편에 무엇이 준비되어 있는지 보세요.</p>
+<div class="btns"><button class="btn gold" onclick="openGift()">🎁 다시 보기</button></div>
 ${V('로마서 6:23','죄의 삯은 사망이요 <b>하나님의 은사는</b> 그리스도 예수 우리 주 안에 있는 <b>영생</b>이니라','green')}
 <div class="cmp"><div class="a"><strong>죄의 삯</strong>내가 일한 대가<br>→ 마땅히 받는 것<br>→ <b>사망</b></div><div class="b"><strong>하나님의 은사</strong>값없이 주시는 선물<br>→ 받기만 하면 됨<br>→ <b>영생</b></div></div>
 <div class="bubble"><b>영생이란?</b> 단지 끝없이 오래 사는 것이 아닙니다. <b>하나님을 알고 그분과 함께 살아가는 생명</b>이며, 지금 시작되어 죽음 너머까지 이어지는 관계입니다.</div>
@@ -613,6 +637,7 @@ respond:{t:'나의 응답',cap:'당신은 지금 어느 편에 계십니까?',ht
 <h2>다리가 놓였습니다.<br>이제 건너가는 일이 남았습니다</h2>
 <p class="solo">예수님을 믿는다는 것은 이렇게 말할 수 있습니다.</p>
 <div class="cmp"><div class="a" style="background:#f3ece0"><strong>🔄 회개</strong>내가 주인 되어 가던 길에서 돌아서는 것</div><div class="b"><strong>🤝 믿음</strong>살아 계신 예수님께 나를 맡기는 것</div></div>
+${V('사도행전 20:21','유대인과 헬라인들에게 <b>하나님께 대한 회개</b>와 <b>우리 주 예수 그리스도께 대한 믿음</b>을 증언한 것이라','green')}
 ${V('요한복음 1:12','<b>영접하는 자</b> 곧 그 이름을 믿는 자들에게는 <b>하나님의 자녀가 되는 권세</b>를 주셨으니','green')}
 ${V('요한계시록 3:20','볼지어다 내가 <b>문 밖에 서서 두드리노니</b> 누구든지 내 음성을 듣고 <b>문을 열면</b> 내가 그에게로 들어가 그와 더불어 먹고 그는 나와 더불어 먹으리라','green')}
 ${Q('믿는다는 것은 사실이라고 인정하는 것인가요?','인정하는 것에서 시작하지만 거기서 멈추지 않습니다. 의자가 튼튼하다는 것을 아는 것만으로는 쉴 수 없고, 실제로 앉아 몸을 맡겨야 합니다. 믿음은 예수님이 나를 위해 죽고 살아나셨다는 사실 위에 <b>나 자신을 맡기는 것</b>입니다.')}
@@ -658,7 +683,7 @@ summary:{t:'한눈에 보기',cap:'하나님의 선물 영생 — 다리 예화'
 <div class="stepNo">정리</div>
 <h2>한눈에 보는 복음</h2>
 <div class="verse"><div class="tx" style="font-size:.95em;line-height:1.9">
-① <b>하나님의 뜻</b> — 요 3:16, 요 10:10<br>② <b>우리의 현실 · 죄</b> — 롬 3:23, 사 53:6, 사 59:2<br>③ <b>죄의 결과</b> — 롬 6:23 앞, 히 9:27<br>④ <b>우리의 한계</b> — 엡 2:8-9<br>⑤ <b>십자가</b> — 롬 5:8, 벧전 3:18<br>⑥ <b>부활</b> — 고전 15:3-4, 요 14:6<br>⑦ <b>선물인 영생</b> — 롬 6:23, 요 17:3<br>⑧ <b>나의 응답</b> — 요 1:12, 계 3:20<br>⑨ <b>확신</b> — 요 5:24, 요일 5:11-13</div></div>
+① <b>하나님의 뜻</b> — 요 3:16, 요 10:10<br>② <b>우리의 현실 · 죄</b> — 롬 3:23, 사 53:6, 사 59:2<br>③ <b>죄의 결과</b> — 롬 6:23 앞, 히 9:27<br>④ <b>우리의 한계</b> — 엡 2:8-9<br>⑤ <b>십자가</b> — 롬 5:8, 벧전 3:18<br>⑥ <b>부활</b> — 고전 15:3-4, 요 14:6<br>⑦ <b>선물인 영생</b> — 롬 6:23, 요 17:3<br>⑧ <b>나의 응답</b> — 행 20:21, 요 1:12, 계 3:20<br>⑨ <b>확신</b> — 요 5:24, 요일 5:11-13</div></div>
 <div class="btns"><button class="btn" onclick="go(0)">처음부터 다시</button><button class="btn ghost" onclick="share()">🔗 이 앱 보내기</button></div>
 ${N('· 종이에 이 그림을 직접 그리며 다시 설명하고, 그 종이를 선물로 드리세요.<br>· 이해 확인 질문: "인간의 문제는 무엇이라고 했나요?" "예수님은 무엇을 하셨다고 이해하셨나요?" "믿는다는 것은 무엇이라고 느끼셨나요?" "이해되지 않는 표현은 어디였나요?"')}`},
 faq:{t:'자주 묻는 질문',cap:'궁금한 것은 언제든 물어보세요',html:`
@@ -713,13 +738,7 @@ effort:{t:'Our Limits',cap:'No effort can reach God',html:`
 <div class="stepNo">4 · OUR LIMITS</div>
 <h2>We cannot cross by<br>our own efforts</h2>
 <p>People build many bridges to try to cross this chasm. Tap a button and <b>try it yourself.</b></p>
-<div class="btns">
- <button class="btn ghost" onclick="tryPlank(this,'Good works',90)">🤲 Good works</button>
- <button class="btn ghost" onclick="tryPlank(this,'Religion',74)">🙏 Religion</button>
- <button class="btn ghost" onclick="tryPlank(this,'Morality',80)">⚖️ Morality</button>
- <button class="btn ghost" onclick="tryPlank(this,'Philosophy',86)">📚 Philosophy</button>
- <button class="btn ghost" onclick="tryPlank(this,'Success',70)">💰 Success</button>
-</div>
+<div class="btns effBtns">${UI[st.lang].eff.map((e,i)=>`<button class="btn ghost" onclick="tryPlank(this,${i})">${e.label}</button>`).join('')}</div>
 <div id="effortMsg"></div>
 ${Q('Does this mean living a good life is meaningless?','No. Doing good is valuable, and God is pleased with it. It simply means we cannot <b>buy salvation</b> with good works. The order is reversed: we do not reach God by doing good; rather, those saved by God\'s grace live out good works in gratitude (Ephesians 2:10).')}
 ${N('· Let the listener tap the buttons. Each time one falls: "Will this work?"<br>· Ask: "What have you relied on to cross this chasm?"<br>· Be sure to cover the question above so that good works are not seen as bad.')}`},
@@ -744,8 +763,8 @@ ${N('· The bridge did not collapse — the resurrection holds it firm forever.<
 gift:{t:'The Gift of God',cap:'Eternal life is God\'s free gift',html:`
 <div class="stepNo">7 · THE GIFT</div>
 <h2>Salvation is not a reward,<br>but a gift</h2>
-<p class="solo">A gift is not earned by work; it is <b>received freely.</b> Open the gift box in the picture.</p>
-<div class="btns"><button class="btn gold" onclick="openGift()">🎁 Open the gift</button></div>
+<p class="solo">A gift is not earned by work; it is <b>received freely.</b> See what God has prepared on his side of the picture.</p>
+<div class="btns"><button class="btn gold" onclick="openGift()">🎁 Show again</button></div>
 ${V('Romans 6:23','For the wages of sin is death, but <b>the gift of God</b> is <b>eternal life</b> in Christ Jesus our Lord.','green')}
 <div class="cmp"><div class="a"><strong>Wages of sin</strong>what I earned<br>→ what I deserve<br>→ <b>death</b></div><div class="b"><strong>Gift of God</strong>given freely<br>→ simply receive it<br>→ <b>eternal life</b></div></div>
 <div class="bubble"><b>What is eternal life?</b> It is not just living forever. It is <b>a life of knowing God and living with him</b> — a relationship that begins now and continues beyond death.</div>
@@ -763,6 +782,7 @@ respond:{t:'My Response',cap:'Which side are you on now?',html:`
 <h2>The bridge is in place.<br>Now it is time to cross</h2>
 <p class="solo">Believing in Jesus can be described like this:</p>
 <div class="cmp"><div class="a" style="background:#f3ece0"><strong>🔄 Repent</strong>turn from the way where I was my own master</div><div class="b"><strong>🤝 Believe</strong>entrust myself to the living Jesus</div></div>
+${V('Acts 20:21','I have declared to both Jews and Greeks that they must <b>turn to God in repentance</b> and <b>have faith in our Lord Jesus.</b>','green')}
 ${V('John 1:12','Yet <b>to all who did receive him,</b> to those who believed in his name, he gave <b>the right to become children of God</b>','green')}
 ${V('Revelation 3:20','Here I am! <b>I stand at the door and knock.</b> If anyone hears my voice and <b>opens the door,</b> I will come in and eat with that person, and they with me.','green')}
 ${Q('Does believing mean agreeing that it is true?','It starts with agreeing, but does not stop there. Knowing a chair is strong will not let you rest; you have to actually sit down and put your weight on it. Faith is <b>entrusting myself</b> to the fact that Jesus died and rose again for me.')}
@@ -808,7 +828,7 @@ summary:{t:'Summary',cap:'The Gift of God — The Bridge to Life',html:`
 <div class="stepNo">SUMMARY</div>
 <h2>The gospel at a glance</h2>
 <div class="verse"><div class="tx" style="font-size:.95em;line-height:1.9">
-① <b>God's purpose</b> — John 3:16; 10:10<br>② <b>Our problem: sin</b> — Rom 3:23; Isa 53:6; 59:2<br>③ <b>The result</b> — Rom 6:23a; Heb 9:27<br>④ <b>Our limits</b> — Eph 2:8-9<br>⑤ <b>The cross</b> — Rom 5:8; 1 Pet 3:18<br>⑥ <b>The resurrection</b> — 1 Cor 15:3-4; John 14:6<br>⑦ <b>The gift of eternal life</b> — Rom 6:23; John 17:3<br>⑧ <b>My response</b> — John 1:12; Rev 3:20<br>⑨ <b>Assurance</b> — John 5:24; 1 John 5:11-13</div></div>
+① <b>God's purpose</b> — John 3:16; 10:10<br>② <b>Our problem: sin</b> — Rom 3:23; Isa 53:6; 59:2<br>③ <b>The result</b> — Rom 6:23a; Heb 9:27<br>④ <b>Our limits</b> — Eph 2:8-9<br>⑤ <b>The cross</b> — Rom 5:8; 1 Pet 3:18<br>⑥ <b>The resurrection</b> — 1 Cor 15:3-4; John 14:6<br>⑦ <b>The gift of eternal life</b> — Rom 6:23; John 17:3<br>⑧ <b>My response</b> — Acts 20:21; John 1:12; Rev 3:20<br>⑨ <b>Assurance</b> — John 5:24; 1 John 5:11-13</div></div>
 <div class="btns"><button class="btn" onclick="go(0)">Start again</button><button class="btn ghost" onclick="share()">🔗 Share this app</button></div>
 <p style="font-size:.75em;color:#999">Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.</p>
 ${N('· Draw the picture on paper as you explain it again, and give the paper as a gift.<br>· Check understanding: "What did it say our problem is?" "What did Jesus do?" "What does believing mean?" "Which words were unclear?"')}`},
@@ -864,13 +884,7 @@ effort:{t:'我们的局限',cap:'人靠自己的努力，无法来到神面前',
 <div class="stepNo">4 · 我们的局限</div>
 <h2>靠自己的努力<br>无法跨越</h2>
 <p>人们尝试架起各种各样的桥来跨越这道深渊。请点按钮，<b>亲自试一试。</b></p>
-<div class="btns">
- <button class="btn ghost" onclick="tryPlank(this,'善行',70)">🤲 善行</button>
- <button class="btn ghost" onclick="tryPlank(this,'宗教',62)">🙏 宗教</button>
- <button class="btn ghost" onclick="tryPlank(this,'道德',66)">⚖️ 道德</button>
- <button class="btn ghost" onclick="tryPlank(this,'哲学',58)">📚 哲学</button>
- <button class="btn ghost" onclick="tryPlank(this,'成功',54)">💰 成功</button>
-</div>
+<div class="btns effBtns">${UI[st.lang].eff.map((e,i)=>`<button class="btn ghost" onclick="tryPlank(this,${i})">${e.label}</button>`).join('')}</div>
 <div id="effortMsg"></div>
 ${Q('那么行善就没有意义了吗？','不是的。行善是宝贵的，神也喜悦。只是我们不能用行善来<b>换取救恩</b>。顺序正好相反：不是靠行善来到神面前，而是蒙神恩典得救的人，怀着感恩的心过行善的生活（以弗所书 2:10）。')}
 ${N('· 让对方亲自点按钮。每次桥掉下去时问："这样可以吗？"<br>· 问："你一直想靠什么来跨越这道深渊？"<br>· 一定要讲上面的问题，免得对方以为行善是不好的。')}`},
@@ -895,8 +909,8 @@ ${N('· 桥没有塌——复活使这座桥永远坚固。<br>· 林前15:3-4�
 gift:{t:'神的恩赐',cap:'永生是神白白的恩赐',html:`
 <div class="stepNo">7 · 神的恩赐</div>
 <h2>救恩不是报酬，<br>而是礼物</h2>
-<p class="solo">礼物不是靠工作赚来的，而是<b>白白领受的。</b>请打开图画里的礼物盒。</p>
-<div class="btns"><button class="btn gold" onclick="openGift()">🎁 打开礼物</button></div>
+<p class="solo">礼物不是靠工作赚来的，而是<b>白白领受的。</b>请看图画中神那一边为你预备了什么。</p>
+<div class="btns"><button class="btn gold" onclick="openGift()">🎁 再看一次</button></div>
 ${V('罗马书 6:23','因为罪的工价乃是死；<b>惟有神的恩赐，</b>在我们的主基督耶稣里，<b>乃是永生。</b>','green')}
 <div class="cmp"><div class="a"><strong>罪的工价</strong>我做工的报酬<br>→ 应得的<br>→ <b>死</b></div><div class="b"><strong>神的恩赐</strong>白白赐给的礼物<br>→ 只要领受<br>→ <b>永生</b></div></div>
 <div class="bubble"><b>什么是永生？</b>不只是永远活着，而是<b>认识神、与神一同生活的生命</b>。我们与神的关系从现在开始，延续到死亡之后。</div>
@@ -914,6 +928,7 @@ respond:{t:'我的回应',cap:'你现在在哪一边？',html:`
 <h2>桥已经架好了，<br>接下来要做的，就是走过这座桥</h2>
 <p class="solo">信耶稣，可以这样理解。</p>
 <div class="cmp"><div class="a" style="background:#f3ece0"><strong>🔄 悔改</strong>离开凡事以自己为主的道路，转向神</div><div class="b"><strong>🤝 信心</strong>把自己交托给如今仍然活着的耶稣</div></div>
+${V('使徒行传 20:21','对犹太人和希腊人证明<b>当向神悔改，</b><b>信靠我主耶稣基督。</b>','green')}
 ${V('约翰福音 1:12','<b>凡接待他的，</b>就是信他名的人，他就<b>赐他们权柄作神的儿女。</b>','green')}
 ${V('启示录 3:20','看哪，<b>我站在门外叩门，</b>若有听见我声音就<b>开门的，</b>我要进到他那里去，我与他，他与我一同坐席。','green')}
 ${Q('相信就是承认这是事实吗？','从承认开始，但不止于此。知道椅子很结实并不能让你休息，你必须真的坐下，让椅子承托你的身体。信心就是相信耶稣为我死而复活，并以此为根基，<b>把自己交托给他</b>。')}
@@ -959,7 +974,7 @@ summary:{t:'总结',cap:'神的恩赐 永生——生命之桥',html:`
 <div class="stepNo">总结</div>
 <h2>一眼看懂福音</h2>
 <div class="verse"><div class="tx" style="font-size:.95em;line-height:1.9">
-① <b>神的心意</b>——约3:16；10:10<br>② <b>人的问题：罪</b>——罗3:23；赛53:6；59:2<br>③ <b>罪的结果</b>——罗6:23上；来9:27<br>④ <b>我们的局限</b>——弗2:8-9<br>⑤ <b>耶稣的十字架</b>——罗5:8；彼前3:18<br>⑥ <b>复活</b>——林前15:3-4；约14:6<br>⑦ <b>永生的恩赐</b>——罗6:23；约17:3<br>⑧ <b>我的回应</b>——约1:12；启3:20<br>⑨ <b>确据</b>——约5:24；约壹5:11-13</div></div>
+① <b>神的心意</b>——约3:16；10:10<br>② <b>人的问题：罪</b>——罗3:23；赛53:6；59:2<br>③ <b>罪的结果</b>——罗6:23上；来9:27<br>④ <b>我们的局限</b>——弗2:8-9<br>⑤ <b>耶稣的十字架</b>——罗5:8；彼前3:18<br>⑥ <b>复活</b>——林前15:3-4；约14:6<br>⑦ <b>永生的恩赐</b>——罗6:23；约17:3<br>⑧ <b>我的回应</b>——徒20:21；约1:12；启3:20<br>⑨ <b>确据</b>——约5:24；约壹5:11-13</div></div>
 <div class="btns"><button class="btn" onclick="go(0)">重新开始</button><button class="btn ghost" onclick="share()">🔗 分享这个应用</button></div>
 <p style="font-size:.75em;color:#999">经文引自《和合本》圣经。</p>
 ${N('· 一边在纸上画这幅图一边再讲一遍，并把这张纸送给对方。<br>· 确认理解："人的问题是什么？""耶稣做了什么？""相信是什么意思？""哪里不明白？"')}`},
@@ -981,7 +996,7 @@ function setLang(l,keep){
   st.lang=l; save(); L=UI[l]; document.documentElement.lang=l==='zh'?'zh-CN':l;
   document.body.dataset.lang=l;
   $('#hTitle').textContent=L.title; $('#hSub').textContent=L.sub; $('#tocH').textContent=L.toc; $('#tocHelp').innerHTML=L.tocHelp; $('#fsLbl').textContent=L.fs;
-  const T={tMan:L.man,tGod:L.god,tSin:L.sin,tDeath:L.death,tJudg:L.judg,tJesus:L.jesus,tRisen:L.risen,lifeTxt:L.life};
+  const T={tMan:L.man,tGod:L.god,tSin:L.sin,tJesus:L.jesus,tRisen:L.risen,tFree:L.free,tHear:L.hear,tBelieve:L.believe,m1:'1. '+L.manL[0],m2:'2. '+L.manL[1],m3:'3. '+L.manL[2],g1:'1. '+L.godL[0],g2:'2. '+L.godL[1],g3:'3. '+L.godL[2]};
   for(const k in T) $('#'+k).textContent=T[k];
   document.title=L.shareT;
   buildSteps();
@@ -1026,25 +1041,30 @@ panel.addEventListener('touchend',e=>{ if(e.target.closest('input,textarea'))ret
 function crack(dir){
   if(dir===-1)return;
   setStage('joined');
-  setTimeout(()=>{ setStage('split night boltOn'); $('#svg').classList.add('shake');
-    setTimeout(()=>{$('#svg').classList.remove('shake');stage.classList.remove('boltOn')},1100);},400);
+  setTimeout(()=>{ setStage('split night'); },500);
 }
 function replayCrack(){ setStage('joined'); setTimeout(()=>crack(1),900); }
 function dropCross(dir){ if(dir===-1)return; setStage('split deep night'); setTimeout(()=>setStage(steps[idx('cross')].stage),400); }
 function replayCross(){ setStage('split deep night'); setTimeout(()=>setStage(steps[idx('cross')].stage),700); }
 function replayRise(){ setStage(steps[idx('cross')].stage); setTimeout(()=>setStage(steps[idx('risen')].stage),600); }
-function openGift(){ stage.classList.add('giftOpen'); toast(L.giftT); }
+function openGift(){ stage.classList.remove('gift'); void stage.offsetWidth; setTimeout(()=>stage.classList.add('gift'),60); }
 
 let tried=new Set();
-function tryPlank(btn,label,len){
+function tryPlank(btn,i){
+  const e=L.eff[i]; if(!e||btn.dataset.done) return null;
+  btn.dataset.done='1';
   const g=$('#planks'); const id='pk'+Date.now();
-  g.insertAdjacentHTML('beforeend',`<g id="${id}" class="plank go"><rect x="150" y="145" width="${len}" height="9" rx="2" fill="#E9DFC7" stroke="#B9A57A"/><text x="${150+len/2}" y="138" text-anchor="middle" font-size="16" font-weight="800" fill="#1F2756" style="font-family:Pretendard,sans-serif">${label}</text></g>`);
+  g.insertAdjacentHTML('beforeend',`<g id="${id}" class="plank go"><rect x="150" y="145" width="${e.len}" height="9" rx="2" fill="#E9DFC7" stroke="#B9A57A"/><text x="${150+e.len/2}" y="138" text-anchor="middle" font-size="16" font-weight="800" fill="#F7F2E6" style="font-family:Pretendard,sans-serif">${e.label}</text></g>`);
   setTimeout(()=>document.getElementById(id)?.remove(),2500);
-  btn.style.textDecoration='line-through'; btn.style.opacity=.6;
-  tried.add(label);
+  btn.classList.add('tried');
   const m=$('#effortMsg');
-  if(tried.size<3) m.innerHTML=`<div class="bubble fade">${L.eff1(label)}</div>`;
-  else m.innerHTML=L.eff3();
+  const blk=document.createElement('div'); blk.className='effBlk fade';
+  blk.innerHTML=`<div class="effHead">${e.label}<span class="sr">. </span></div><p>${e.msg}</p>${e.vs.map(v=>V(v[0],v[1],'red')).join('')}`;
+  m.appendChild(blk);
+  const out=[blk];
+  if(panel.querySelectorAll('.effBtns .tried').length===L.eff.length){ const f=document.createElement('div'); f.className='fade'; f.innerHTML=L.eff3(); m.appendChild(f); out.push(f); }
+  if(!speaking) setTimeout(()=>blk.scrollIntoView({behavior:'smooth',block:'start'}),60);
+  return out;
 }
 
 function walkTo(x,ms=2200,cb){
@@ -1204,17 +1224,24 @@ function readStep(delay){
   const units=[...panel.children];
   if(typeMode) units.forEach(u=>{ if(!u.matches('.stepNo')) u.classList.add('rd-hide'); });
   panel.scrollTop=0;
-  let i=0;
+  let i=0; const queue=[];
   const lang=L.tts, voice=voiceFor(lang), rate=st.rate||0.95, cps=(CPS[st.lang]||7)*rate/0.95;
   const id=steps[cur].id;
-  if(id==='effort') [...panel.querySelectorAll('.btns .btn')].forEach((b,k)=>setTimeout(()=>{ if(gen===rdGen&&b.style.opacity!=='0.6') b.click(); },2500+k*1500));
   if(id==='gift') setTimeout(()=>{ if(gen===rdGen) openGift(); },2500);
   function next(){
     if(gen!==rdGen) return;
     restoreTyped(); fol=null; try{CSS.highlights&&CSS.highlights.delete('rd')}catch(e){} panel.querySelectorAll('.rd-now').forEach(e=>e.classList.remove('rd-now'));
     const live=[...panel.children];           /* 화면 중간에 새로 생긴 칸(판자 결과 등)도 읽는다 */
-    const el=live[i++];
+    let el=queue.length?queue.shift():live[i++];
     if(!el){ return stepDone(); }
+    if(id==='effort'&&el.classList&&el.classList.contains('effBtns')){
+      el.classList.remove('rd-hide'); $('#effortMsg').classList.remove('rd-hide');
+      const b=[...el.querySelectorAll('.btn:not(.tried)')][0];
+      if(b){ const idx=[...el.querySelectorAll('.btn')].indexOf(b); const out=tryPlank(b,idx)||[]; queue.push(...out); i--; return setTimeout(next,1200); }
+      return next();
+    }
+    if(el.id==='effortMsg'&&el.dataset.read) return next();
+    if(el.parentElement&&el.parentElement.id==='effortMsg') $('#effortMsg').dataset.read='1';
     el.classList.remove('rd-hide');
     if(skippable(el)) return next();
     const text=unitText(el);
