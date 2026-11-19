@@ -294,6 +294,22 @@ body.compact #stageCap{left:10px;transform:none;max-width:calc(100% - 100px);whi
 .qRow{margin:2px 0 4px}
 .btn.qBtn{min-height:44px;padding:8px 14px}
 .btn.qBtn{width:100%;background:transparent;border:1.5px dashed var(--gold2);color:var(--gold2)}
+
+/* 수레바퀴 */
+svg.wheel .wlab{cursor:pointer}
+svg.wheel .wlab rect{fill:#fff;transition:fill .3s}
+svg.wheel .wlab:not(.hub) text{fill:#1A2150}
+svg.wheel .wlab.on rect{fill:#E2C46A;stroke:#1A2150;stroke-width:1.5}
+svg.wheel .hub.on circle{stroke:#fff}
+svg.wheel .whRot{transform-origin:160px 160px}
+.wlist{display:grid;gap:8px;margin:6px 0 14px}
+.wrow{background:var(--navy2,#161E44);border:1px solid rgba(255,255,255,.07);border-left:3px solid rgba(226,196,106,.45);border-radius:12px;padding:10px 13px;cursor:pointer;transition:border-color .3s,background .3s}
+.wrow.on{border-left-color:var(--gold2,#E2C46A);background:rgba(226,196,106,.08)}
+.wrow .wh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.wrow .wh b{color:var(--gold2,#E2C46A);font-size:.95em}
+.wrow .wh span{font-size:.82em;opacity:.8}
+.wrow .wv{font-family:"Noto Serif KR","Noto Serif SC",serif;font-size:.9em;line-height:1.7;margin-top:4px;color:#F4F0E6}
+.wrow .wr{font-size:.75em;margin-top:3px;color:var(--gold2,#E2C46A);font-weight:700}
 </style>
 </head>
 <body>
@@ -552,24 +568,48 @@ const META=[
 ];
 
 const LANGBTNS=`<div class="langRow"><button onclick="setLang('ko')">한국어</button><button onclick="setLang('en')">English</button><button onclick="setLang('zh')">中文</button></div>`;
-const WHEEL=(w,p,f,e,c,ct,rim)=>`<svg viewBox="0 0 320 320" style="width:100%;max-width:300px;display:block;margin:10px auto">
+const WHEEL=(w,p,f,e,c,ct,rim)=>{const fs=st.lang==='en'?12.5:15; const lab=(k,x,y,t,size)=>`<g class="wlab" data-k="${k}" style="transform-origin:${x}px ${y}px" onclick="wheelTo('${k}')"><rect x="${x-43}" y="${y-14}" width="86" height="28" rx="14"/><text x="${x}" y="${y+5}" font-size="${size||15}">${t}</text></g>`;
+return `<svg class="wheel" viewBox="0 0 320 320" style="width:100%;max-width:300px;display:block;margin:10px auto">
  <defs><path id="rimArc" d="M 41 160 A 119 119 0 0 1 279 160"/><path id="rimArc2" d="M 32 160 A 128 128 0 0 0 288 160"/>
   <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9CF85"/><stop offset="1" stop-color="#B68C2C"/></linearGradient></defs>
- <circle cx="160" cy="160" r="124" fill="none" stroke="url(#wg)" stroke-width="34"/>
+ <circle cx="160" cy="160" r="124" fill="none" stroke="url(#wg)" stroke-width="34" onclick="wheelTo('rim')" style="cursor:pointer"/>
  <circle cx="160" cy="160" r="141" fill="none" stroke="#8C6A1E" stroke-width="1"/><circle cx="160" cy="160" r="107" fill="none" stroke="#8C6A1E" stroke-width="1"/>
- <text font-size="15" font-weight="800" fill="#1A2150" letter-spacing="1.5"><textPath href="#rimArc" startOffset="50%" text-anchor="middle">${rim}</textPath></text>
- <text font-size="12" font-weight="800" fill="#1A2150" letter-spacing="1"><textPath href="#rimArc2" startOffset="50%" text-anchor="middle">${RIMSUB[st.lang]||''}</textPath></text>
- <rect x="149" y="53" width="22" height="214" fill="url(#wg)"/><rect x="53" y="149" width="214" height="22" fill="url(#wg)"/>
- <circle cx="160" cy="160" r="44" fill="#1A2150" stroke="#E9CF85" stroke-width="3"/>
- <text x="160" y="158" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">${c}</text>
- <text x="160" y="176" text-anchor="middle" fill="#E9CF85" font-size="12">${ct}</text>
- <g font-size="15" font-weight="800" text-anchor="middle">
-  <rect x="117" y="62" width="86" height="28" rx="14" fill="#fff"/><text x="160" y="81" fill="#1A2150">${w}</text>
-  <rect x="117" y="230" width="86" height="28" rx="14" fill="#fff"/><text x="160" y="249" fill="#1A2150">${p}</text>
-  <rect x="30" y="146" width="86" height="28" rx="14" fill="#fff"/><text x="73" y="165" fill="#1A2150" font-size="${st.lang==='en'?12.5:15}">${f}</text>
-  <rect x="204" y="146" width="86" height="28" rx="14" fill="#fff"/><text x="247" y="165" fill="#1A2150" font-size="${st.lang==='en'?12.5:15}">${e}</text>
+ <text font-size="15" font-weight="800" fill="#1A2150" letter-spacing="1.5" style="pointer-events:none"><textPath href="#rimArc" startOffset="50%" text-anchor="middle">${rim}</textPath></text>
+ <text font-size="12" font-weight="800" fill="#1A2150" letter-spacing="1" style="pointer-events:none"><textPath href="#rimArc2" startOffset="50%" text-anchor="middle">${RIMSUB[st.lang]||''}</textPath></text>
+ <g class="whRot">
+  <rect x="149" y="53" width="22" height="214" fill="url(#wg)"/><rect x="53" y="149" width="214" height="22" fill="url(#wg)"/>
+  <g font-weight="800" text-anchor="middle">${lab('w',160,76,w)}${lab('p',160,244,p)}${lab('f',73,160,f,fs)}${lab('e',247,160,e,fs)}</g>
+  <g class="wlab hub" data-k="c" style="transform-origin:160px 160px" onclick="wheelTo('c')">
+   <circle cx="160" cy="160" r="44" fill="#1A2150" stroke="#E9CF85" stroke-width="3"/>
+   <text x="160" y="158" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">${c}</text>
+   <text x="160" y="176" text-anchor="middle" fill="#E9CF85" font-size="12">${ct}</text>
+  </g>
  </g>
-</svg>`;
+</svg>`;};
+/* 수레바퀴 돌리기: 누른 살이 맨 위로 오고, 글자는 늘 바로 서 있다 */
+let wDeg=0;
+const WPOS={w:0,e:90,p:180,f:270};
+function wheelSet(deg,anim){ const sv=panel.querySelector('svg.wheel'); if(!sv)return; wDeg=deg;
+  sv.querySelectorAll('.whRot,.wlab').forEach(g=>{ g.style.transition=anim?'transform 1.6s cubic-bezier(.35,.1,.25,1)':'none'; });
+  sv.querySelector('.whRot').style.transform=`rotate(${deg}deg)`;
+  sv.querySelectorAll('.wlab').forEach(g=>g.style.transform=`rotate(${-deg}deg)`); }
+function wheelTo(k,noScroll){
+  let target;
+  if(k in WPOS){ target=-WPOS[k]; let d=((target-wDeg)%360+540)%360-180; target=wDeg+d; if(Math.abs(d)<1) target=wDeg+360; }
+  else target=wDeg+360;
+  const dir=target>=wDeg?1:-1; wheelSet(target,true);
+  clearTimeout(wheelTo._t);
+  /* 잠시 보여 준 뒤, 같은 방향으로 굴러 기본 자리(세로=하나님·가로=사람)로 돌아온다 */
+  if(target%360!==0) wheelTo._t=setTimeout(()=>{ if(!panel.querySelector('svg.wheel'))return; wheelSet(dir>0?Math.ceil(wDeg/360)*360:Math.floor(wDeg/360)*360,true); },2600);
+  panel.querySelectorAll('.wrow').forEach(r=>r.classList.toggle('on',r.dataset.k===k));
+  panel.querySelectorAll('svg.wheel .wlab').forEach(g=>g.classList.toggle('on',g.dataset.k===k));
+  const row=panel.querySelector(`.wrow[data-k="${k}"]`); if(row&&!noScroll) row.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function wheelIntro(){ const sv=panel.querySelector('svg.wheel'); if(!sv)return; wDeg=0;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  wheelSet(-270,false); requestAnimationFrame(()=>requestAnimationFrame(()=>wheelSet(0,true))); }
+/* 살마다 붙는 말씀: [키, 이름, 실천, 장절, 본문, 함께 볼 말씀] */
+const WLIST=items=>`<div class="wlist">${items.map(([k,n,d,r,t,r2])=>`<div class="wrow" data-k="${k}" onclick="wheelTo('${k}',1)"><div class="wh"><b>${n}</b><span>${d}</span></div><div class="wv">${t}</div><div class="wr">${r}${r2?' · '+r2:''}</div></div>`).join('')}</div>`;
 const RIMSUB={ko:'테 · 순종',en:'RIM · OBEDIENCE',zh:'轮圈 · 顺服'};
 
 
@@ -702,7 +742,15 @@ next:{t:'그다음 걸음',cap:'하나님 편에서 시작되는 새 삶',html:`
 <h2>새 생명이 자라가려면</h2>
 <p class="solo">갓 태어난 아기가 먹고 숨 쉬고 가족 안에서 자라듯, 그리스도인도 <b>네 가지</b>로 자라갑니다.</p>
 ${WHEEL('말씀','기도','교제','증거','그리스도','중심','순종하는 그리스도인의 삶')}
-<p style="font-size:.9em">📖 <b>말씀</b> — 요한복음을 하루 한 장씩<br>🙏 <b>기도</b> — 하나님께 무엇이든 말씀드리기<br>🤝 <b>교제</b> — 이 복음을 전해 준 사람, 교회와 함께<br>📣 <b>증거</b> — 받은 선물을 다른 이에게<br>⭕ <b>테 · 순종</b> — 삶의 현장에서 말씀대로 사는 것. 바퀴가 땅에 닿는 곳이 테이듯, 믿음은 순종으로 드러납니다. 듣고 행하지 않으면 모래 위에 지은 집과 같습니다 (요 14:21, 롬 12:1, 마 7:24-27).</p>
+<p style="font-size:.85em;opacity:.85">바퀴의 살이나 아래 말씀을 누르면 수레바퀴가 돌았다가 제자리로 돌아옵니다.</p>
+${WLIST([
+['c','중심 · 그리스도','삶의 주인이 바뀐 새사람','고린도후서 5:17','그런즉 누구든지 그리스도 안에 있으면 새로운 피조물이라 이전 것은 지나갔으니 보라 새 것이 되었도다','갈라디아서 2:20'],
+['w','말씀','요한복음을 하루 한 장씩','디모데후서 3:16','모든 성경은 하나님의 감동으로 된 것으로 교훈과 책망과 바르게 함과 의로 교육하기에 유익하니','여호수아 1:8'],
+['p','기도','하나님께 무엇이든 말씀드리기','요한복음 15:7','너희가 내 안에 거하고 내 말이 너희 안에 거하면 무엇이든지 원하는 대로 구하라 그리하면 이루리라','빌립보서 4:6-7'],
+['f','교제','복음을 전해 준 사람, 교회와 함께','마태복음 18:20','두세 사람이 내 이름으로 모인 곳에는 나도 그들 중에 있느니라','히브리서 10:24-25'],
+['e','증거','받은 선물을 다른 이에게','마태복음 4:19','나를 따라오라 내가 너희를 사람을 낚는 어부가 되게 하리라','로마서 1:16'],
+['rim','테 · 순종','삶의 현장에서 말씀대로 사는 것','로마서 12:1','그러므로 형제들아 내가 하나님의 모든 자비하심으로 너희를 권하노니 너희 몸을 하나님이 기뻐하시는 거룩한 산 제물로 드리라 이는 너희가 드릴 영적 예배니라','요한복음 14:21']
+])}
 ${BDAY('🎂 나의 영적 생일','이름','영적 생일 카드 만들기')}
 ${N('· 수레바퀴: 힘은 중심(그리스도)에서 나옵니다. 세로 살(말씀·기도)은 하나님과, 가로 살(교제·증거)은 사람과의 관계.<br>· 일주일 안에 다시 만날 약속을 정하고, 요한복음을 함께 읽으며 양육을 시작하세요.')}`},
 summary:{t:'한눈에 보기',cap:'하나님의 선물 영생 — 다리 예화',html:`
@@ -848,7 +896,15 @@ next:{t:'Next Steps',cap:'A new life begins on God\'s side',html:`
 <h2>How new life grows</h2>
 <p class="solo">Just as a newborn baby eats, breathes and grows up in a family, a Christian grows in <b>four ways.</b></p>
 ${WHEEL('Word','Prayer','Fellowship','Witness','Christ','the center','THE OBEDIENT CHRISTIAN')}
-<p style="font-size:.9em">📖 <b>Word</b> — read one chapter of John each day<br>🙏 <b>Prayer</b> — talk to God about anything<br>🤝 <b>Fellowship</b> — with the one who shared this, and a church<br>📣 <b>Witness</b> — pass the gift on to others<br>⭕ <b>Rim · Obedience</b> — living out God’s word in daily life. The rim is where the wheel meets the road; faith shows itself in obedience. Hearing without doing is like a house built on sand (John 14:21; Rom 12:1; Matt 7:24-27).</p>
+<p style="font-size:.85em;opacity:.85">Tap a spoke, or a verse below, to turn the wheel; it rolls back to its place.</p>
+${WLIST([
+['c','Hub · Christ','a new person with a new Lord','2 Corinthians 5:17','Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!','Galatians 2:20'],
+['w','Word','one chapter of John each day','2 Timothy 3:16','All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness','Joshua 1:8'],
+['p','Prayer','talk to God about anything','John 15:7','If you remain in me and my words remain in you, ask whatever you wish, and it will be done for you.','Philippians 4:6-7'],
+['f','Fellowship','with the one who shared this, and a church','Matthew 18:20','For where two or three gather in my name, there am I with them.','Hebrews 10:24-25'],
+['e','Witness','pass the gift on to others','Matthew 4:19','“Come, follow me,” Jesus said, “and I will send you out to fish for people.”','Romans 1:16'],
+['rim','Rim · Obedience','living out God’s word in daily life','Romans 12:1','Therefore, I urge you, brothers and sisters, in view of God’s mercy, to offer your bodies as a living sacrifice, holy and pleasing to God—this is your true and proper worship.','John 14:21']
+])}
 ${BDAY('🎂 My spiritual birthday','Name','Make my birthday card')}
 ${N('· The Wheel: power comes from the hub (Christ). The vertical spokes (Word, Prayer) relate to God; the horizontal (Fellowship, Witness) to people.<br>· Arrange to meet within a week and begin follow-up by reading John together.')}`},
 summary:{t:'Summary',cap:'The Gift of God — The Bridge to Life',html:`
@@ -995,7 +1051,15 @@ next:{t:'下一步',cap:'在神这一边开始的新生命',html:`
 <h2>新生命如何成长</h2>
 <p class="solo">就像新生的婴儿要吃、要呼吸、在家中长大，基督徒也借着<b>四件事</b>成长。</p>
 ${WHEEL('神的话','祷告','团契','见证','基督','中心','顺服的基督徒生活')}
-<p style="font-size:.9em">📖 <b>神的话</b>——每天读一章《约翰福音》<br>🙏 <b>祷告</b>——什么事都可以告诉神<br>🤝 <b>团契</b>——与向你传福音的人及教会里的弟兄姊妹交流、相伴<br>📣 <b>见证</b>——把领受的礼物分享给别人<br>⭕ <b>轮圈 · 顺服</b>——在生活中照着神的话去行。轮圈是车轮接触地面的地方，信心借着顺服显明出来。听道而不行，就像把房子盖在沙土上（约14:21；罗12:1；太7:24-27）。</p>
+<p style="font-size:.85em;opacity:.85">点轮辐或下面的经文，车轮会转动，然后回到原位。</p>
+${WLIST([
+['c','中心 · 基督','生命有了新的主','哥林多后书 5:17','若有人在基督里，他就是新造的人，旧事已过，都变成新的了。','加拉太书 2:20'],
+['w','神的话','每天读一章《约翰福音》','提摩太后书 3:16','圣经都是神所默示的，于教训、督责、使人归正、教导人学义都是有益的。','约书亚记 1:8'],
+['p','祷告','什么事都可以告诉神','约翰福音 15:7','你们若常在我里面，我的话也常在你们里面，凡你们所愿意的，祈求，就给你们成就。','腓立比书 4:6-7'],
+['f','团契','与向你传福音的人及教会相伴','马太福音 18:20','因为无论在哪里，有两三个人奉我的名聚会，那里就有我在他们中间。','希伯来书 10:24-25'],
+['e','见证','把领受的礼物分享给别人','马太福音 4:19','耶稣对他们说：“来跟从我，我要叫你们得人如得鱼一样。”','罗马书 1:16'],
+['rim','轮圈 · 顺服','在生活中照着神的话去行','罗马书 12:1','所以弟兄们，我以神的慈悲劝你们，将身体献上，当作活祭，是圣洁的，是神所喜悦的；你们如此事奉乃是理所当然的。','约翰福音 14:21']
+])}
 ${BDAY('🎂 我的属灵生日','名字','制作属灵生日卡')}
 ${N('· 车轮比喻：力量来自中心（基督）。竖的轮辐（神的话、祷告）是与神的关系，横的轮辐（团契、见证）是与人的关系。<br>· 约好在一周内再见面，从一起读《约翰福音》开始，陪伴对方在信仰上成长。')}`},
 summary:{t:'总结',cap:'神的恩赐 永生——生命之桥',html:`
@@ -1192,7 +1256,7 @@ function go(i,dir){
   if(speaking){ rdGen++; clearTimeout(rdTimer); try{speechSynthesis.cancel()}catch(e){} restoreTyped(); }
   setStage(s.stage);
   $('#stageCap').textContent=s.cap;
-  panel.innerHTML=s.html; panel.scrollTop=0; panel.classList.remove('fade'); void panel.offsetWidth; panel.classList.add('fade');
+  panel.innerHTML=s.html; wheelIntro(); panel.scrollTop=0; panel.classList.remove('fade'); void panel.offsetWidth; panel.classList.add('fade');
   [...$('#dots').children].forEach((d,k)=>d.classList.toggle('on',k===i));
   [...$('#tocList').children].forEach((d,k)=>d.classList.toggle('cur',k===i));
   $('#prev').disabled=i===0; $('#prev').style.opacity=i===0?.4:1;
