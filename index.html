@@ -310,6 +310,10 @@ svg.wheel .whRot{transform-origin:160px 160px}
 .wrow .wh span{font-size:.82em;opacity:.8}
 .wrow .wv{font-family:"Noto Serif KR","Noto Serif SC",serif;font-size:.9em;line-height:1.7;margin-top:4px;color:#F4F0E6}
 .wrow .wr{font-size:.75em;margin-top:3px;color:var(--gold2,#E2C46A);font-weight:700}
+.wtabs{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:2px 0 8px}
+.wtab{font:inherit;font-size:.8em;padding:5px 9px;border-radius:999px;border:1px solid rgba(226,196,106,.45);background:transparent;color:#F4F0E6;cursor:pointer}
+.wtab.on{background:var(--gold2,#E2C46A);color:#141A3C;border-color:transparent;font-weight:700}
+#wdet{min-height:150px;cursor:default}
 </style>
 </head>
 <body>
@@ -601,15 +605,17 @@ function wheelTo(k,noScroll){
   clearTimeout(wheelTo._t);
   /* 잠시 보여 준 뒤, 같은 방향으로 굴러 기본 자리(세로=하나님·가로=사람)로 돌아온다 */
   if(target%360!==0) wheelTo._t=setTimeout(()=>{ if(!panel.querySelector('svg.wheel'))return; wheelSet(dir>0?Math.ceil(wDeg/360)*360:Math.floor(wDeg/360)*360,true); },2600);
-  panel.querySelectorAll('.wrow').forEach(r=>r.classList.toggle('on',r.dataset.k===k));
+  const det=panel.querySelector('#wdet'); if(det&&WL[k]){ det.innerHTML=WCARD(k); det.dataset.k=k; det.classList.remove('fade'); void det.offsetWidth; det.classList.add('fade'); if(window.linkifyRefs) try{linkifyRefs(det)}catch(e){} }
+  panel.querySelectorAll('.wtab').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
   panel.querySelectorAll('svg.wheel .wlab').forEach(g=>g.classList.toggle('on',g.dataset.k===k));
-  const row=panel.querySelector(`.wrow[data-k="${k}"]`); if(row&&!noScroll) row.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function wheelIntro(){ const sv=panel.querySelector('svg.wheel'); if(!sv)return; wDeg=0;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   wheelSet(-270,false); requestAnimationFrame(()=>requestAnimationFrame(()=>wheelSet(0,true))); }
 /* 살마다 붙는 말씀: [키, 이름, 실천, 장절, 본문, 함께 볼 말씀] */
-const WLIST=items=>`<div class="wlist">${items.map(([k,n,d,r,t,r2])=>`<div class="wrow" data-k="${k}" onclick="wheelTo('${k}',1)"><div class="wh"><b>${n}</b><span>${d}</span></div><div class="wv">${t}</div><div class="wr">${r}${r2?' · '+r2:''}</div></div>`).join('')}</div>`;
+let WL={};
+const WCARD=k=>{const it=WL[k]; if(!it)return ''; const [,n,d,r,t,r2]=it; return `<div class="wh"><b>${n}</b><span>${d}</span></div><div class="wv">${t}</div><div class="wr">${r}${r2?' · '+r2:''}</div>`;};
+const WLIST=items=>{WL={}; items.forEach(it=>WL[it[0]]=it); const tabs=items.map(([k,n])=>`<button class="wtab${k==='c'?' on':''}" data-k="${k}" onclick="wheelTo('${k}')">${n.split(' · ')[0]}</button>`).join(''); return `<div class="wtabs">${tabs}</div><div class="wrow on" id="wdet" data-k="c">${WCARD('c')}</div>`;};
 const RIMSUB={ko:'테 · 순종',en:'RIM · OBEDIENCE',zh:'轮圈 · 顺服'};
 
 
@@ -742,7 +748,6 @@ next:{t:'그다음 걸음',cap:'하나님 편에서 시작되는 새 삶',html:`
 <h2>새 생명이 자라가려면</h2>
 <p class="solo">갓 태어난 아기가 먹고 숨 쉬고 가족 안에서 자라듯, 그리스도인도 <b>네 가지</b>로 자라갑니다.</p>
 ${WHEEL('말씀','기도','교제','증거','그리스도','중심','순종하는 그리스도인의 삶')}
-<p style="font-size:.85em;opacity:.85">바퀴의 살이나 아래 말씀을 누르면 수레바퀴가 돌았다가 제자리로 돌아옵니다.</p>
 ${WLIST([
 ['c','중심 · 그리스도','삶의 주인이 바뀐 새사람','고린도후서 5:17','그런즉 누구든지 그리스도 안에 있으면 새로운 피조물이라 이전 것은 지나갔으니 보라 새 것이 되었도다','갈라디아서 2:20'],
 ['w','말씀','요한복음을 하루 한 장씩','디모데후서 3:16','모든 성경은 하나님의 감동으로 된 것으로 교훈과 책망과 바르게 함과 의로 교육하기에 유익하니','여호수아 1:8'],
@@ -896,7 +901,6 @@ next:{t:'Next Steps',cap:'A new life begins on God\'s side',html:`
 <h2>How new life grows</h2>
 <p class="solo">Just as a newborn baby eats, breathes and grows up in a family, a Christian grows in <b>four ways.</b></p>
 ${WHEEL('Word','Prayer','Fellowship','Witness','Christ','the center','THE OBEDIENT CHRISTIAN')}
-<p style="font-size:.85em;opacity:.85">Tap a spoke, or a verse below, to turn the wheel; it rolls back to its place.</p>
 ${WLIST([
 ['c','Hub · Christ','a new person with a new Lord','2 Corinthians 5:17','Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!','Galatians 2:20'],
 ['w','Word','one chapter of John each day','2 Timothy 3:16','All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness','Joshua 1:8'],
@@ -1051,7 +1055,6 @@ next:{t:'下一步',cap:'在神这一边开始的新生命',html:`
 <h2>新生命如何成长</h2>
 <p class="solo">就像新生的婴儿要吃、要呼吸、在家中长大，基督徒也借着<b>四件事</b>成长。</p>
 ${WHEEL('神的话','祷告','团契','见证','基督','中心','顺服的基督徒生活')}
-<p style="font-size:.85em;opacity:.85">点轮辐或下面的经文，车轮会转动，然后回到原位。</p>
 ${WLIST([
 ['c','中心 · 基督','生命有了新的主','哥林多后书 5:17','若有人在基督里，他就是新造的人，旧事已过，都变成新的了。','加拉太书 2:20'],
 ['w','神的话','每天读一章《约翰福音》','提摩太后书 3:16','圣经都是神所默示的，于教训、督责、使人归正、教导人学义都是有益的。','约书亚记 1:8'],
