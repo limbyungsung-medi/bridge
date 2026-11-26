@@ -1941,7 +1941,9 @@ function readStep(delay){
   if(typeMode) units.forEach(u=>{ if(!u.matches('.stepNo')) u.classList.add('rd-hide'); });
   panel.scrollTop=0;
   let i=0; const queue=[];
-  const lang=L.tts, voice=voiceFor(lang), rate=st.rate||0.95, cps=(CPS[st.lang]||7)*rate/0.95;
+  let lang=L.tts, voice=voiceFor(lang); const rate=st.rate||0.95, cps=(CPS[st.lang]||7)*rate/0.95;
+  /* 네팔어 음성이 없는 휴대폰: 같은 데바나가리 문자를 읽는 힌디어 음성으로 대신 읽는다 */
+  if(!voice && st.lang==='ne'){ const hv=voiceFor('hi-IN'); if(hv){ lang='hi-IN'; voice=hv; if(!readStep._neHi){ readStep._neHi=1; toast('नेपाली आवाज नभएकाले हिन्दी आवाजले पढिँदैछ'); } } else if(!readStep._neNo){ readStep._neNo=1; toast('यो फोनमा नेपाली आवाज छैन — सेटिङ › पाठ-वाचन (TTS) मा नेपाली आवाज थप्नुहोस्'); } }
   const id=steps[cur].id;
   if(id==='gift') setTimeout(()=>{ if(gen===rdGen) openGift(); },2500);
   function next(){
